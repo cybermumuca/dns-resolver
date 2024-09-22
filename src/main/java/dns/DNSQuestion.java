@@ -4,6 +4,25 @@ import dns.enums.QueryType;
 import utils.PacketBuffer;
 
 public class DNSQuestion {
+    /**
+     * Representa a seção de Pergunta de uma mensagem DNS.
+     *
+     * <p>Esta classe encapsula os detalhes de uma pergunta DNS, conforme definido na
+     * <a href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1.2">RFC 1035</a>.
+     *
+     * <p><strong>Atributos:</strong>
+     * <ul>
+     *   <li><strong>qName</strong> - O nome do domínio a ser consultado, representado
+     *   como uma string.</li>
+     *   <li><strong>qType</strong> - O tipo de consulta DNS, especificando o tipo
+     *   de registro desejado (por exemplo, A, AAAA, CNAME, etc.).</li>
+     *   <li><strong>qClass</strong> - A classe do registro, normalmente definida como
+     *   1 para registros da Internet.</li>
+     * </ul>
+     *
+     * @see QueryType
+     */
+
     public String qName;
     public QueryType qType;
     public short qClass;

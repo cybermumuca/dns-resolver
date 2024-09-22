@@ -4,6 +4,43 @@ import dns.enums.ResultCode;
 import utils.PacketBuffer;
 
 public class DNSHeader {
+    /**
+     * Representa o cabeçalho de uma mensagem DNS.
+     *
+     * <p>Esta classe encapsula os detalhes do cabeçalho de uma mensagem DNS, conforme
+     * definido na <a href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1.1">RFC 1035</a>.
+     *
+     * <p><strong>Atributos:</strong>
+     * <ul>
+     *   <li><strong>id</strong> - Um identificador único para a consulta, utilizado
+     *   para associar perguntas e respostas.</li>
+     *   <li><strong>query</strong> - Um flag que indica se a mensagem é uma consulta
+     *   (true) ou uma resposta (false).</li>
+     *   <li><strong>opcode</strong> - O código da operação que especifica o tipo
+     *   de consulta (por exemplo, padrão, inversa, etc.).</li>
+     *   <li><strong>authoritativeAnswer</strong> - Um flag que indica se a resposta
+     *   é autoritativa.</li>
+     *   <li><strong>truncatedMessage</strong> - Um flag que indica se a mensagem
+     *   foi truncada devido a um tamanho excessivo.</li>
+     *   <li><strong>recursionDesired</strong> - Um flag que indica se o cliente
+     *   deseja que o servidor realize uma consulta recursiva.</li>
+     *   <li><strong>recursionAvailable</strong> - Um flag que indica se o servidor
+     *   suporta consultas recursivas.</li>
+     *   <li><strong>z</strong> - Reservado para uso futuro; deve ser definido como 0.</li>
+     *   <li><strong>resultCode</strong> - O código de resultado que indica o status
+     *   da resposta (por exemplo, nenhum erro, falha, etc.).</li>
+     *   <li><strong>questionCount</strong> - A contagem de perguntas na mensagem.</li>
+     *   <li><strong>answerRecordCount</strong> - A contagem de registros de resposta
+     *   na mensagem.</li>
+     *   <li><strong>authoritativeRecordCount</strong> - A contagem de registros
+     *   autoritativos na mensagem.</li>
+     *   <li><strong>additionalRecordCount</strong> - A contagem de registros
+     *   adicionais na mensagem.</li>
+     * </ul>
+     *
+     * @see ResultCode
+     */
+
     public int id;
     public boolean query;
     public short opcode;

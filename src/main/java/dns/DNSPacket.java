@@ -8,6 +8,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DNSPacket {
+    /**
+     * Representa a encapsulação de um pacote da mensagem DNS.
+     *
+     * <p>Esta classe encapsula a estrutura de um pacote DNS, conforme definido na
+     * <a href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1">RFC 1035</a>.
+     *
+     * <p><strong>Atributos:</strong>
+     * <ul>
+     *   <li><strong>header</strong> - O cabeçalho do pacote DNS, que contém informações
+     *   sobre a consulta, como ID, contagem de perguntas e flags.</li>
+     *   <li><strong>questions</strong> - Uma lista de perguntas DNS que são incluídas
+     *   no pacote, cada uma representando uma consulta a um nome de domínio.</li>
+     *   <li><strong>answers</strong> - Uma lista de registros de resposta recebidos
+     *   do servidor DNS, que contém as informações solicitadas.</li>
+     *   <li><strong>authorities</strong> - Uma lista de registros autoritativos,
+     *   que fornece informações sobre o servidor que fornece a resposta.</li>
+     *   <li><strong>resources</strong> - Uma lista de registros adicionais que podem
+     *   ajudar na resolução da consulta.</li>
+     * </ul>
+     *
+     * @see DNSHeader
+     * @see DNSQuestion
+     * @see DNSRecord
+     */
+
     public DNSHeader header;
     public List<DNSQuestion> questions;
     public List<DNSRecord> answers;
