@@ -120,7 +120,7 @@ public class DNSPacket {
     }
 
     public static void main(String[] args) throws Exception {
-        String qname = "google.com";
+        String qname = "github.com";
         QueryType qtype = QueryType.A;
 
         var socket = new DatagramSocket();
@@ -147,7 +147,11 @@ public class DNSPacket {
 
         PacketBuffer replyBuffer = new PacketBuffer(responsePacket.getData());
         DNSPacket replyPacket = DNSPacket.fromBuffer(replyBuffer);
-        System.out.println(replyPacket);
+        System.out.println(replyPacket.header);
+        System.out.println(replyPacket.questions);
+        System.out.println(replyPacket.answers);
+        System.out.println(replyPacket.authorities);
+        System.out.println(replyPacket.resources);
         socket.close();
     }
 }

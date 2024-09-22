@@ -207,4 +207,12 @@ public class PacketBuffer {
         write(0);
     }
 
+    public void set(int position, int value) {
+        buffer[position] = (byte) value;
+    }
+
+    public void set16b(int position, int value) {
+        set(position, value >> 8);
+        set(position + 1, value & 0xFF);
+    }
 }
