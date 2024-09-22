@@ -22,6 +22,12 @@ public class DNSQuestion {
         this.qClass = (short) buffer.read16b();
     }
 
+    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+        buffer.writeQName(this.qName);
+        buffer.write16b(this.qType.getValue());
+        buffer.write16b(1);
+    }
+
     @Override
     public String toString() {
         return "DNSQuestion{" +

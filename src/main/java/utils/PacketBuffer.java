@@ -3,8 +3,17 @@ package utils;
 import java.nio.charset.StandardCharsets;
 
 public class PacketBuffer {
+    /**
+     * Representa o Buffer de um pacote
+     */
+
     private final byte[] buffer;
     private int position;
+
+    public PacketBuffer() {
+        this.buffer = new byte[512];
+        this.position = 0;
+    }
 
     public PacketBuffer(byte[] buffer) {
         this.buffer = buffer;
@@ -127,4 +136,75 @@ public class PacketBuffer {
         System.arraycopy(buffer, pos, result, 0, length);
         return result;
     }
+
+    /**
+     * Escreve 8 bits e avança 1 posição.
+     *
+     * @param value Valor a ser escrito.
+     * @throws Exception Se o final do buffer for atingido.
+     */
+    public void write(int value) throws Exception {
+        if (position >= buffer.length) {
+            throw new Exception("End of Buffer");
+        }
+        buffer[position] = (byte) value;
+        position++;
+    }
+
+    /**
+     * Escreve 16 bits e avança 2 posições.
+     *
+     * @param value Valor a ser escrito.
+     * @throws Exception Se o final do buffer for atingido.
+     */
+    public void write16b(int value) throws Exception {
+        if (position + 1 >= buffer.length) {
+            throw new Exception("End of Buffer");
+        }
+        write(value >> 8);
+        write(value & 0xFF);
+    }
+
+    /**
+     * Escreve 32 bits e avança 4 posições.
+     *
+     * @param value Valor a ser escrito.
+     * @throws Exception Se o final do buffer for atingido.
+     */
+    public void write32b(int value) throws Exception {
+        if (position + 3 >= buffer.length) {
+            throw new Exception("End of Buffer");
+        }
+        write((value >> 24) & 0xFF);
+        write((value >> 16) & 0xFF);
+        write((value >> 8) & 0xFF);
+        write(value & 0xFF);
+    }
+
+    /**
+     * Escreve o 'QName' (nome do domínio) do pacote DNS.
+     *
+     * @param qname Nome do domínio.
+     * @throws Exception Se um rótulo tiver mais de 63 caracteres ou o final do buffer for atingido.
+     */
+    public void writeQName(String qname) throws Exception {
+        String[] labels = qname.split("\\.");
+
+        for (String label : labels) {
+            int length = label.length();
+
+            if (length > 0x3F) {
+                throw new IllegalArgumentException("Single label exceeds 63 characters of length");
+            }
+
+            write(length);
+
+            byte[] labelBytes = label.getBytes(StandardCharsets.UTF_8);
+            for (byte b : labelBytes) {
+                write(b);
+            }
+        }
+        write(0);
+    }
+
 }

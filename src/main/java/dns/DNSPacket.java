@@ -1,7 +1,9 @@
 package dns;
 
+import dns.enums.QueryType;
 import utils.PacketBuffer;
 
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,31 @@ public class DNSPacket {
         return dnsPacket;
     }
 
+    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+        this.header.questionCount = this.questions.size();
+        this.header.answerRecordCount = this.answers.size();
+        this.header.authoritativeRecordCount = this.authorities.size();
+        this.header.additionalRecordCount = this.resources.size();
+
+        this.header.writeInBuffer(buffer);
+
+        for (DNSQuestion question : questions) {
+            question.writeInBuffer(buffer);
+        }
+
+        for (DNSRecord answer : answers) {
+            answer.writeInBuffer(buffer);
+        }
+
+        for (DNSRecord authority : authorities) {
+            authority.writeInBuffer(buffer);
+        }
+
+        for (DNSRecord additionalRecord : resources) {
+            additionalRecord.writeInBuffer(buffer);
+        }
+    }
+
     @Override
     public String toString() {
         return "DNSPacket{" +
@@ -65,5 +92,37 @@ public class DNSPacket {
                 ", authorities=" + authorities +
                 ", resources=" + resources +
                 '}';
+    }
+
+    public static void main(String[] args) throws Exception {
+        String qname = "google.com";
+        QueryType qtype = QueryType.A;
+
+        var socket = new DatagramSocket();
+
+        DNSPacket packet = new DNSPacket();
+
+        packet.header.id = 8920;
+        packet.header.questionCount = 1;
+        packet.header.recursionDesired = true;
+        packet.header.query = true;
+        packet.questions.add(new DNSQuestion(qname, qtype, (short) 1));
+
+        PacketBuffer buffer = new PacketBuffer();
+        packet.writeInBuffer(buffer);
+
+        DatagramPacket dnsQueryPacket = new DatagramPacket(buffer.getBuffer(), buffer.getBuffer().length, InetAddress.getByName("8.8.8.8"), 53);
+
+        socket.send(dnsQueryPacket);
+
+        byte[] dnsReplyPacket = new byte[1024];
+        DatagramPacket responsePacket = new DatagramPacket(dnsReplyPacket, dnsReplyPacket.length);
+
+        socket.receive(responsePacket);
+
+        PacketBuffer replyBuffer = new PacketBuffer(responsePacket.getData());
+        DNSPacket replyPacket = DNSPacket.fromBuffer(replyBuffer);
+        System.out.println(replyPacket);
+        socket.close();
     }
 }

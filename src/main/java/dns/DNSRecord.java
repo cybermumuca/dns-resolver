@@ -4,6 +4,7 @@ import dns.enums.QueryType;
 import utils.PacketBuffer;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class DNSRecord {
     public String name;
@@ -45,6 +46,27 @@ public class DNSRecord {
                 return new DNSRecord(name, QueryType.A, qClass, ttl, length, address);
             }
             default -> {
+                throw new UnsupportedOperationException("Unsupported query type: " + type);
+            }
+        }
+    }
+
+    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+        switch (this.type) {
+            case A -> {
+                buffer.writeQName(name);
+                buffer.write16b(type.getValue());
+                buffer.write16b(1);
+                buffer.write32b(ttl);
+                buffer.write16b(4);
+
+                var rawAddress = InetAddress.getByName(address).getAddress();
+                buffer.write(rawAddress[0]);
+                buffer.write(rawAddress[1]);
+                buffer.write(rawAddress[2]);
+                buffer.write(rawAddress[3]);
+            }
+            case UNKNOWN -> {
                 throw new UnsupportedOperationException("Unsupported query type: " + type);
             }
         }

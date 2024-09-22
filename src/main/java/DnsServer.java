@@ -1,7 +1,6 @@
 import dns.DNSPacket;
 import utils.PacketBuffer;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -22,7 +21,6 @@ public class DnsServer {
 
                 DNSPacket dnsPacket = DNSPacket.fromBuffer(requestBuffer);
 
-                System.out.println(dnsPacket);
             }
 
         } catch (Exception e) {

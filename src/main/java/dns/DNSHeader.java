@@ -18,7 +18,9 @@ public class DNSHeader {
     public int authoritativeRecordCount;
     public int additionalRecordCount;
 
-    public DNSHeader() {}
+    public DNSHeader() {
+        this.resultCode = ResultCode.NO_ERROR;
+    }
 
     public DNSHeader(int id,
                      boolean query,
@@ -67,6 +69,25 @@ public class DNSHeader {
         this.additionalRecordCount = buffer.read16b();
     }
 
+    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+        buffer.write16b(this.id);
+
+        int flags = (this.query ? 0 : 1) << 15;
+        flags |= (this.opcode & 0xF) << 11;
+        flags |= (this.authoritativeAnswer ? 1 : 0) << 10;
+        flags |= (this.truncatedMessage ? 1 : 0) << 9;
+        flags |= (this.recursionDesired ? 1 : 0) << 8;
+        flags |= (this.recursionAvailable ? 1 : 0) << 7;
+        flags |= (this.z & 0x7) << 4;
+        flags |= this.resultCode.getCode() & 0xF ;
+
+        buffer.write16b(flags);
+
+        buffer.write16b(questionCount);
+        buffer.write16b(answerRecordCount);
+        buffer.write16b(authoritativeRecordCount);
+        buffer.write16b(additionalRecordCount);
+    }
 
     @Override
     public String toString() {
