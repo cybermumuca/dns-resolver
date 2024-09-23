@@ -15,7 +15,6 @@ public class UDPServer implements Runnable {
         try (DatagramSocket socket = new DatagramSocket(3053)) {
             System.out.println("UDP Server listening on port 3053...");
 
-
             while (true) {
                 byte[] buffer = new byte[512];
 
