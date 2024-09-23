@@ -1,7 +1,7 @@
-package dns;
+package com.mumuca.dns;
 
-import dns.enums.QueryType;
-import utils.PacketBuffer;
+import com.mumuca.dns.enums.QueryType;
+import com.mumuca.utils.PacketBuffer;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;

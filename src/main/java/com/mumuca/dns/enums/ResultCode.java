@@ -1,4 +1,4 @@
-package dns.enums;
+package com.mumuca.dns.enums;
 
 public enum ResultCode {
     /**

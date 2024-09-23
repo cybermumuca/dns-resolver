@@ -1,7 +1,7 @@
-package dns;
+package com.mumuca.dns;
 
-import dns.enums.ResultCode;
-import utils.PacketBuffer;
+import com.mumuca.dns.enums.ResultCode;
+import com.mumuca.utils.PacketBuffer;
 
 public class DNSHeader {
     /**

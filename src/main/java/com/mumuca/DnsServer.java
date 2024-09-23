@@ -1,5 +1,7 @@
-import dns.DNSPacket;
-import utils.PacketBuffer;
+package com.mumuca;
+
+import com.mumuca.dns.DNSPacket;
+import com.mumuca.utils.PacketBuffer;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
