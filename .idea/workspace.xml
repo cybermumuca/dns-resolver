@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4ea5a36d-f3c0-43d0-a545-ae178155d7dd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSHeader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSHeader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSQuestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSQuestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/enums/QueryType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/enums/QueryType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/UDPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/UDPServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/utils/PacketBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/utils/PacketBuffer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

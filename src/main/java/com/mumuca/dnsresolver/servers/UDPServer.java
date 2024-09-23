@@ -1,15 +1,19 @@
 package com.mumuca.dnsresolver.servers;
 
-import com.mumuca.dnsresolver.dns.DNSPacket;
 import com.mumuca.dnsresolver.servers.handlers.UDPQueryHandler;
-import com.mumuca.dnsresolver.utils.PacketBuffer;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class UDPServer implements Runnable {
 
-    public UDPServer() {}
+    private final ExecutorService executorService;
+
+    public UDPServer() {
+        this.executorService = Executors.newVirtualThreadPerTaskExecutor();
+    }
 
     @Override
     public void run() {
@@ -23,13 +27,13 @@ public class UDPServer implements Runnable {
 
                 socket.receive(queryPacket);
 
-                Thread queryHandlerThread = new Thread(new UDPQueryHandler(socket, queryPacket));
-
-                queryHandlerThread.start();
+                executorService.submit(new UDPQueryHandler(socket, queryPacket));
             }
 
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        } finally {
+            this.executorService.shutdown();
         }
     }
 }
