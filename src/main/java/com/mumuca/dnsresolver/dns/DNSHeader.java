@@ -2,6 +2,7 @@ package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.enums.ResultCode;
 import com.mumuca.dnsresolver.utils.PacketBuffer;
+import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
 
 public class DNSHeader {
     /**
@@ -59,35 +60,7 @@ public class DNSHeader {
         this.resultCode = ResultCode.NO_ERROR;
     }
 
-    public DNSHeader(int id,
-                     boolean query,
-                     short opcode,
-                     boolean authoritativeAnswer,
-                     boolean truncatedMessage,
-                     boolean recursionDesired,
-                     boolean recursionAvailable,
-                     short z,
-                     ResultCode resultCode,
-                     int questionCount,
-                     int answerRecordCount,
-                     int authoritativeRecordCount,
-                     int additionalRecordCount) {
-        this.id = id;
-        this.query = query;
-        this.opcode = opcode;
-        this.authoritativeAnswer = authoritativeAnswer;
-        this.truncatedMessage = truncatedMessage;
-        this.recursionDesired = recursionDesired;
-        this.recursionAvailable = recursionAvailable;
-        this.z = z;
-        this.resultCode = resultCode;
-        this.questionCount = questionCount;
-        this.answerRecordCount = answerRecordCount;
-        this.authoritativeRecordCount = authoritativeRecordCount;
-        this.additionalRecordCount = additionalRecordCount;
-    }
-
-    public void readBuffer(PacketBuffer buffer) throws Exception {
+    public void readBuffer(PacketBuffer buffer) throws EndOfBufferException {
         this.id = buffer.read16b();
         var flags = buffer.read16b();
 
@@ -106,7 +79,7 @@ public class DNSHeader {
         this.additionalRecordCount = buffer.read16b();
     }
 
-    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+    public void writeInBuffer(PacketBuffer buffer) throws EndOfBufferException {
         buffer.write16b(this.id);
 
         int flags = (this.query ? 0 : 1) << 15;
@@ -116,7 +89,7 @@ public class DNSHeader {
         flags |= (this.recursionDesired ? 1 : 0) << 8;
         flags |= (this.recursionAvailable ? 1 : 0) << 7;
         flags |= (this.z & 0x7) << 4;
-        flags |= this.resultCode.getCode() & 0xF ;
+        flags |= this.resultCode.getCode() & 0xF;
 
         buffer.write16b(flags);
 

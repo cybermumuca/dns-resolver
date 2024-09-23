@@ -1,5 +1,9 @@
 package com.mumuca.dnsresolver.utils;
 
+import com.mumuca.dnsresolver.utils.exceptions.BufferPositionOutOfBoundsException;
+import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.utils.exceptions.JumpLimitExceededException;
+
 import java.nio.charset.StandardCharsets;
 
 public class PacketBuffer {
@@ -28,45 +32,45 @@ public class PacketBuffer {
         return position;
     }
 
-    public int read() throws Exception {
+    public int read() throws EndOfBufferException {
         if (position >= buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException("End of Buffer.");
         }
 
         return buffer[position++] & 0xFF;
     }
 
-    public int read16b() throws Exception {
+    public int read16b() throws EndOfBufferException {
         if (position + 1 >= buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException("End of Buffer.");
         }
         int highByte = read();
         int lowByte = read();
         return (highByte << 8) | lowByte;
     }
 
-    public int read32b() throws Exception {
+    public int read32b() throws EndOfBufferException {
         if (position + 3 >= buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException("End of Buffer.");
         }
         return (read() << 24) | (read() << 16) | (read() << 8) | read();
     }
 
-    public void seek(int pos) throws Exception {
+    public void seek(int pos) throws BufferPositionOutOfBoundsException {
         if (pos >= buffer.length) {
-            throw new Exception("Seek position out of bounds");
+            throw new BufferPositionOutOfBoundsException("Seek position out of bounds.");
         }
         position = pos;
     }
 
-    public int get(int pos) throws Exception {
+    public int get(int pos) throws BufferPositionOutOfBoundsException {
         if (pos >= buffer.length) {
-            throw new Exception("Position out of bounds");
+            throw new BufferPositionOutOfBoundsException();
         }
         return buffer[pos] & 0xFF;
     }
 
-    public String readQName() throws Exception {
+    public String readQName() throws JumpLimitExceededException, BufferPositionOutOfBoundsException {
         int pos = this.position;
         boolean jumped = false;
         int maxJumps = 5;
@@ -75,7 +79,8 @@ public class PacketBuffer {
 
         while (true) {
             if (jumpsPerformed > maxJumps) {
-                throw new Exception("Limit of " + maxJumps + " jumps exceeded");
+
+                throw new JumpLimitExceededException("Limit of " + maxJumps + " jumps exceeded.");
             }
 
             int length = get(pos);
@@ -115,9 +120,9 @@ public class PacketBuffer {
         return domainParts.toString();
     }
 
-    public byte[] readBytes(int length) throws Exception {
+    public byte[] readBytes(int length) throws EndOfBufferException {
         if (position + length > buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException();
         }
 
         byte[] result = new byte[length];
@@ -127,9 +132,9 @@ public class PacketBuffer {
         return result;
     }
 
-    public byte[] readBytesAt(int pos, int length) throws Exception {
+    public byte[] readBytesAt(int pos, int length) throws BufferPositionOutOfBoundsException {
         if (pos + length > buffer.length) {
-            throw new Exception("Read position out of bounds");
+            throw new BufferPositionOutOfBoundsException("Read position out of bounds");
         }
 
         byte[] result = new byte[length];
@@ -141,11 +146,11 @@ public class PacketBuffer {
      * Escreve 8 bits e avança 1 posição.
      *
      * @param value Valor a ser escrito.
-     * @throws Exception Se o final do buffer for atingido.
+     * @throws EndOfBufferException Se o final do buffer for atingido.
      */
-    public void write(int value) throws Exception {
+    public void write(int value) throws EndOfBufferException {
         if (position >= buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException("End of Buffer");
         }
         buffer[position] = (byte) value;
         position++;
@@ -155,11 +160,11 @@ public class PacketBuffer {
      * Escreve 16 bits e avança 2 posições.
      *
      * @param value Valor a ser escrito.
-     * @throws Exception Se o final do buffer for atingido.
+     * @throws EndOfBufferException Se o final do buffer for atingido.
      */
-    public void write16b(int value) throws Exception {
+    public void write16b(int value) throws EndOfBufferException {
         if (position + 1 >= buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException("End of Buffer");
         }
         write(value >> 8);
         write(value & 0xFF);
@@ -169,11 +174,11 @@ public class PacketBuffer {
      * Escreve 32 bits e avança 4 posições.
      *
      * @param value Valor a ser escrito.
-     * @throws Exception Se o final do buffer for atingido.
+     * @throws EndOfBufferException Se o final do buffer for atingido.
      */
-    public void write32b(int value) throws Exception {
+    public void write32b(int value) throws EndOfBufferException {
         if (position + 3 >= buffer.length) {
-            throw new Exception("End of Buffer");
+            throw new EndOfBufferException("End of Buffer");
         }
         write((value >> 24) & 0xFF);
         write((value >> 16) & 0xFF);
@@ -185,9 +190,10 @@ public class PacketBuffer {
      * Escreve o 'QName' (nome do domínio) do pacote DNS.
      *
      * @param qname Nome do domínio.
-     * @throws Exception Se um rótulo tiver mais de 63 caracteres ou o final do buffer for atingido.
+     * @throws IllegalArgumentException Se um rótulo tiver mais de 63 caracteres. Veja a <a href="https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.1">RFC 1035</a>
+     * @throws EndOfBufferException Se o final do buffer for atingido.
      */
-    public void writeQName(String qname) throws Exception {
+    public void writeQName(String qname) throws IllegalArgumentException, EndOfBufferException {
         String[] labels = qname.split("\\.");
 
         for (String label : labels) {

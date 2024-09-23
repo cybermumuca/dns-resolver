@@ -1,5 +1,7 @@
 package com.mumuca.dnsresolver.dns.enums;
 
+import com.mumuca.dnsresolver.dns.exceptions.NotImplementedException;
+
 public enum QueryType {
     /**
      * Representa a enumeração de alguns tipos de Resource Records (RR).
@@ -42,6 +44,7 @@ public enum QueryType {
                 return queryType;
             }
         }
-        throw new IllegalArgumentException("Invalid result value: " + value);
+
+        throw new NotImplementedException("Invalid result value: " + value);
     }
 }

@@ -1,11 +1,16 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.enums.QueryType;
+import com.mumuca.dnsresolver.dns.exceptions.NotImplementedException;
 import com.mumuca.dnsresolver.utils.PacketBuffer;
+import com.mumuca.dnsresolver.utils.exceptions.BufferPositionOutOfBoundsException;
+import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.utils.exceptions.JumpLimitExceededException;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class DNSRecord {
     /**
@@ -65,7 +70,7 @@ public class DNSRecord {
         this.address = mx;
     }
 
-    public static DNSRecord fromBuffer(PacketBuffer buffer) throws Exception {
+    public static DNSRecord fromBuffer(PacketBuffer buffer) throws JumpLimitExceededException, BufferPositionOutOfBoundsException, EndOfBufferException, UnknownHostException {
         String name = buffer.readQName();
 
         QueryType type = QueryType.fromValue(buffer.read16b());
@@ -116,13 +121,11 @@ public class DNSRecord {
 
                 return new DNSRecord(name, QueryType.AAAA, qClass, ttl, length, address);
             }
-            default -> {
-                throw new UnsupportedOperationException("Unsupported query type: " + type);
-            }
+            default -> throw new UnsupportedOperationException("Unsupported query type: " + type);
         }
     }
 
-    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+    public void writeInBuffer(PacketBuffer buffer) throws EndOfBufferException, UnknownHostException, UnsupportedOperationException {
         switch (this.type) {
             case A -> {
                 buffer.writeQName(name);
@@ -179,9 +182,7 @@ public class DNSRecord {
                     buffer.write(b);
                 }
             }
-            case UNKNOWN -> {
-                throw new UnsupportedOperationException("Unsupported query type: " + type);
-            }
+            case UNKNOWN -> throw new UnsupportedOperationException("Unsupported query type: " + type);
         }
     }
 

@@ -1,7 +1,14 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.enums.QueryType;
+import com.mumuca.dnsresolver.dns.exceptions.FormatErrorException;
+import com.mumuca.dnsresolver.dns.exceptions.NotImplementedException;
+import com.mumuca.dnsresolver.dns.exceptions.RefusedException;
+import com.mumuca.dnsresolver.dns.exceptions.ServerFailureException;
 import com.mumuca.dnsresolver.utils.PacketBuffer;
+import com.mumuca.dnsresolver.utils.exceptions.BufferPositionOutOfBoundsException;
+import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.utils.exceptions.JumpLimitExceededException;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -55,56 +62,105 @@ public class DNSPacket {
         this.resources = resources;
     }
 
-    public static DNSPacket fromBuffer(PacketBuffer buffer) throws Exception {
+    public static DNSPacket fromBuffer(PacketBuffer buffer) {
         var dnsPacket = new DNSPacket();
-        dnsPacket.header.readBuffer(buffer);
+
+        try {
+            dnsPacket.header.readBuffer(buffer);
+        } catch (EndOfBufferException e) {
+            throw new FormatErrorException("Header malformed.");
+        }
 
         for (short i = 0; i < dnsPacket.header.questionCount; i++) {
-            DNSQuestion question = new DNSQuestion();
-            question.readBuffer(buffer);
-            dnsPacket.questions.add(question);
+            try {
+                DNSQuestion question = new DNSQuestion();
+                question.readBuffer(buffer);
+                dnsPacket.questions.add(question);
+            } catch (JumpLimitExceededException ex) {
+                throw new RefusedException("Jump limit exceeded when trying to read the question label.");
+            } catch (BufferPositionOutOfBoundsException | EndOfBufferException ex) {
+                throw new FormatErrorException("Question malformed.");
+            }
         }
 
         for (short i = 0; i < dnsPacket.header.answerRecordCount; i++) {
-            DNSRecord answer = DNSRecord.fromBuffer(buffer);
-            dnsPacket.answers.add(answer);
+            try {
+                DNSRecord answer = DNSRecord.fromBuffer(buffer);
+                dnsPacket.answers.add(answer);
+            } catch (JumpLimitExceededException ex) {
+                throw new RefusedException("Jump limit exceeded when trying to read the answer record label.");
+            } catch (BufferPositionOutOfBoundsException | UnknownHostException | EndOfBufferException ex) {
+                throw new FormatErrorException("Answer record malformed.");
+            }
         }
 
         for (short i = 0; i < dnsPacket.header.authoritativeRecordCount; i++) {
-            DNSRecord aAnswer = DNSRecord.fromBuffer(buffer);
-            dnsPacket.authorities.add(aAnswer);
+            try {
+                DNSRecord aAnswer = DNSRecord.fromBuffer(buffer);
+                dnsPacket.authorities.add(aAnswer);
+            } catch (JumpLimitExceededException ex) {
+                throw new RefusedException("Jump limit exceeded when trying to read the authority records label.");
+            } catch (BufferPositionOutOfBoundsException | UnknownHostException | EndOfBufferException ex) {
+                throw new FormatErrorException("Authority record malformed.");
+            }
         }
 
         for (short i = 0; i < dnsPacket.header.additionalRecordCount; i++) {
-            DNSRecord additionalRecord = DNSRecord.fromBuffer(buffer);
-            dnsPacket.resources.add(additionalRecord);
+            try {
+                DNSRecord additionalRecord = DNSRecord.fromBuffer(buffer);
+                dnsPacket.resources.add(additionalRecord);
+            } catch (JumpLimitExceededException ex) {
+                throw new RefusedException("Jump limit exceeded when trying to read the authority records label.");
+            } catch (BufferPositionOutOfBoundsException | UnknownHostException | EndOfBufferException ex) {
+                throw new FormatErrorException("Additional record malformed.");
+            }
         }
 
         return dnsPacket;
     }
 
-    public void writeInBuffer(PacketBuffer buffer) throws Exception {
+    public void writeInBuffer(PacketBuffer buffer) {
         this.header.questionCount = this.questions.size();
         this.header.answerRecordCount = this.answers.size();
         this.header.authoritativeRecordCount = this.authorities.size();
         this.header.additionalRecordCount = this.resources.size();
 
-        this.header.writeInBuffer(buffer);
+        try {
+            this.header.writeInBuffer(buffer);
+        } catch (EndOfBufferException e) {
+            throw new ServerFailureException("Something went wrong while trying to mount the header.");
+        }
 
         for (DNSQuestion question : questions) {
-            question.writeInBuffer(buffer);
+            try {
+                question.writeInBuffer(buffer);
+            } catch (EndOfBufferException e) {
+                throw new ServerFailureException("Something went wrong while trying to mount the question.");
+            }
         }
 
         for (DNSRecord answer : answers) {
-            answer.writeInBuffer(buffer);
+            try {
+                answer.writeInBuffer(buffer);
+            } catch (EndOfBufferException | UnknownHostException e) {
+                throw new ServerFailureException("Something went wrong while trying to mount the answer record.");
+            }
         }
 
         for (DNSRecord authority : authorities) {
-            authority.writeInBuffer(buffer);
+            try {
+                authority.writeInBuffer(buffer);
+            } catch (EndOfBufferException | UnknownHostException e) {
+                throw new ServerFailureException("Something went wrong while trying to mount the authority record.");
+            }
         }
 
         for (DNSRecord additionalRecord : resources) {
-            additionalRecord.writeInBuffer(buffer);
+            try {
+                additionalRecord.writeInBuffer(buffer);
+            } catch (EndOfBufferException | UnknownHostException e) {
+                throw new ServerFailureException("Something went wrong while trying to mount the additional record.");
+            }
         }
     }
 

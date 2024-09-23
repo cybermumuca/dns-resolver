@@ -1,6 +1,7 @@
 package com.mumuca.dnsresolver.servers;
 
 import com.mumuca.dnsresolver.dns.DNSPacket;
+import com.mumuca.dnsresolver.servers.handlers.UDPQueryHandler;
 import com.mumuca.dnsresolver.utils.PacketBuffer;
 
 import java.net.DatagramPacket;
@@ -22,13 +23,9 @@ public class UDPServer implements Runnable {
 
                 socket.receive(queryPacket);
 
-                byte[] queryPacketData = queryPacket.getData();
+                Thread queryHandlerThread = new Thread(new UDPQueryHandler(socket, queryPacket));
 
-                PacketBuffer queryPacketDataBuffer = new PacketBuffer(queryPacketData);
-
-                DNSPacket queryDNSPacket = DNSPacket.fromBuffer(queryPacketDataBuffer);
-
-                System.out.println(queryDNSPacket);
+                queryHandlerThread.start();
             }
 
         } catch (Exception ex) {
