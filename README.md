@@ -1,1 +1,1 @@
-# DNS Server
+# DNS Resolver

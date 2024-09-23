@@ -1,12 +1,12 @@
-package com.mumuca;
+package com.mumuca.dnsresolver;
 
-import com.mumuca.dns.DNSPacket;
-import com.mumuca.utils.PacketBuffer;
+import com.mumuca.dnsresolver.dns.DNSPacket;
+import com.mumuca.dnsresolver.utils.PacketBuffer;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class DnsServer {
+public class DNSResolver {
     public static void main(String[] args) {
         try (DatagramSocket serverSocket = new DatagramSocket(3053)) {
             byte[] buffer = new byte[512];

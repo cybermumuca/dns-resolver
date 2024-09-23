@@ -1,4 +1,4 @@
-package com.mumuca.utils;
+package com.mumuca.dnsresolver.utils;
 
 import java.nio.charset.StandardCharsets;
 

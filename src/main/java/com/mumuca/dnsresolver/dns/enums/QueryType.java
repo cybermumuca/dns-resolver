@@ -1,4 +1,4 @@
-package com.mumuca.dns.enums;
+package com.mumuca.dnsresolver.dns.enums;
 
 public enum QueryType {
     /**
