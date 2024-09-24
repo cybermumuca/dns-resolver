@@ -10,6 +10,14 @@
 - [ ] Lookup
 - [ ] Lookup Recursivo
 
+- Tipos de Consultas
+  - [ ] A
+  - [ ] NS
+  - [ ] CNAME
+  - [ ] MX
+  - [ ] AAAA
+  - [ ] SOA
+
 - Configurações
     - Cache
       - [ ] Cache por arquivo
