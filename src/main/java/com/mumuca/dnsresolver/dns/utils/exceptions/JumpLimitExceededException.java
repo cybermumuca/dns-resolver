@@ -1,4 +1,4 @@
-package com.mumuca.dnsresolver.utils.exceptions;
+package com.mumuca.dnsresolver.dns.utils.exceptions;
 
 public class JumpLimitExceededException extends Exception {
     public JumpLimitExceededException(String message) {

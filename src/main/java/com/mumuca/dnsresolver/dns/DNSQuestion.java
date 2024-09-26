@@ -1,11 +1,12 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.enums.QueryType;
-import com.mumuca.dnsresolver.dns.exceptions.NotImplementedException;
-import com.mumuca.dnsresolver.utils.PacketBuffer;
-import com.mumuca.dnsresolver.utils.exceptions.BufferPositionOutOfBoundsException;
-import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
-import com.mumuca.dnsresolver.utils.exceptions.JumpLimitExceededException;
+import com.mumuca.dnsresolver.dns.exceptions.QuestionMalformedException;
+import com.mumuca.dnsresolver.dns.exceptions.SuspiciousDomainNamePayloadException;
+import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
+import com.mumuca.dnsresolver.dns.utils.exceptions.BufferPositionOutOfBoundsException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.JumpLimitExceededException;
 
 public class DNSQuestion {
     /**
@@ -39,16 +40,26 @@ public class DNSQuestion {
         this.qClass = qClass;
     }
 
-    public void readBuffer(PacketBuffer buffer) throws JumpLimitExceededException, BufferPositionOutOfBoundsException, EndOfBufferException, NotImplementedException {
-        this.qName = buffer.readQName();
-        this.qType = QueryType.fromValue(buffer.read16b());
-        this.qClass = (short) buffer.read16b();
+    public void readBuffer(PacketBuffer buffer) throws SuspiciousDomainNamePayloadException, QuestionMalformedException {
+        try {
+            this.qName = buffer.readQName();
+            this.qType = QueryType.fromValue(buffer.read16b());
+            this.qClass = (short) buffer.read16b();
+        } catch (JumpLimitExceededException e) {
+            throw new SuspiciousDomainNamePayloadException();
+        } catch (BufferPositionOutOfBoundsException | EndOfBufferException e) {
+            throw new QuestionMalformedException();
+        }
     }
 
-    public void writeInBuffer(PacketBuffer buffer) throws EndOfBufferException {
-        buffer.writeQName(this.qName);
-        buffer.write16b(this.qType.getValue());
-        buffer.write16b(1);
+    public void writeToBuffer(PacketBuffer buffer) {
+        try {
+            buffer.writeQName(this.qName);
+            buffer.write16b(this.qType.getValue());
+            buffer.write16b(1);
+        } catch (EndOfBufferException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

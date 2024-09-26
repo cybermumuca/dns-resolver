@@ -1,11 +1,12 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.enums.QueryType;
-import com.mumuca.dnsresolver.dns.exceptions.NotImplementedException;
-import com.mumuca.dnsresolver.utils.PacketBuffer;
-import com.mumuca.dnsresolver.utils.exceptions.BufferPositionOutOfBoundsException;
-import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
-import com.mumuca.dnsresolver.utils.exceptions.JumpLimitExceededException;
+import com.mumuca.dnsresolver.dns.exceptions.QueryTypeUnsupportedException;
+import com.mumuca.dnsresolver.dns.exceptions.ResourceRecordMalformedException;
+import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
+import com.mumuca.dnsresolver.dns.utils.exceptions.BufferPositionOutOfBoundsException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.JumpLimitExceededException;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -49,9 +50,7 @@ public class DNSRecord {
     public String address;
     public int priority;
 
-    public DNSRecord() {}
-
-    public DNSRecord(String name, QueryType type, short qClass, int ttl, int length, String address) {
+    private DNSRecord(String name, QueryType type, short qClass, int ttl, int length, String address) {
         this.name = name;
         this.type = type;
         this.qClass = qClass;
@@ -60,7 +59,7 @@ public class DNSRecord {
         this.address = address;
     }
 
-    public DNSRecord(String name, QueryType type, short qClass, int ttl, int length, int priority, String mx) {
+    private DNSRecord(String name, QueryType type, short qClass, int ttl, int length, int priority, String mx) {
         this.name = name;
         this.type = type;
         this.qClass = qClass;
@@ -70,119 +69,129 @@ public class DNSRecord {
         this.address = mx;
     }
 
-    public static DNSRecord fromBuffer(PacketBuffer buffer) throws JumpLimitExceededException, BufferPositionOutOfBoundsException, EndOfBufferException, UnknownHostException {
-        String name = buffer.readQName();
+    public static DNSRecord fromBuffer(PacketBuffer buffer) throws QueryTypeUnsupportedException, ResourceRecordMalformedException {
+        try {
+            String name = buffer.readQName();
 
-        QueryType type = QueryType.fromValue(buffer.read16b());
-        short qClass = (short) buffer.read16b();
-        int ttl = buffer.read32b();
-        int length = buffer.read16b();
+            QueryType type = QueryType.fromValue(buffer.read16b());
+            short qClass = (short) buffer.read16b();
+            int ttl = buffer.read32b();
+            int length = buffer.read16b();
 
-        switch (type) {
-            case A -> {
-                int rawAddress = buffer.read32b();
-                InetAddress inetAddress = Inet4Address.getByAddress(new byte[]{
-                        (byte) (rawAddress >> 24 & 0xFF),
-                        (byte) (rawAddress >> 16 & 0xFF),
-                        (byte) (rawAddress >> 8 & 0xFF),
-                        (byte) (rawAddress & 0xFF)
-                });
-                String address = inetAddress.getHostAddress();
-                return new DNSRecord(name, QueryType.A, qClass, ttl, length, address);
+            switch (type) {
+                case A -> {
+                    int rawAddress = buffer.read32b();
+                    InetAddress inetAddress = Inet4Address.getByAddress(new byte[]{
+                            (byte) (rawAddress >> 24 & 0xFF),
+                            (byte) (rawAddress >> 16 & 0xFF),
+                            (byte) (rawAddress >> 8 & 0xFF),
+                            (byte) (rawAddress & 0xFF)
+                    });
+                    String address = inetAddress.getHostAddress();
+                    return new DNSRecord(name, QueryType.A, qClass, ttl, length, address);
+                }
+                case NS -> {
+                    String ns = buffer.readQName();
+                    return new DNSRecord(name, QueryType.NS, qClass, ttl, length, ns);
+                }
+                case CNAME -> {
+                    String cname = buffer.readQName();
+                    return new DNSRecord(name, QueryType.CNAME, qClass, ttl, length, cname);
+                }
+                case MX -> {
+                    int priority = buffer.read16b();
+                    String mx = buffer.readQName();
+
+                    return new DNSRecord(name, QueryType.MX, qClass, ttl, length, priority, mx);
+                }
+                case AAAA -> {
+                    int rawAddress1 = buffer.read32b();
+                    int rawAddress2 = buffer.read32b();
+                    int rawAddress3 = buffer.read32b();
+                    int rawAddress4 = buffer.read32b();
+
+                    InetAddress inetAddress = Inet6Address.getByAddress(new byte[] {
+                            (byte) (rawAddress1 >> 24), (byte) (rawAddress1 >> 16), (byte) (rawAddress1 >> 8), (byte) rawAddress1,
+                            (byte) (rawAddress2 >> 24), (byte) (rawAddress2 >> 16), (byte) (rawAddress2 >> 8), (byte) rawAddress2,
+                            (byte) (rawAddress3 >> 24), (byte) (rawAddress3 >> 16), (byte) (rawAddress3 >> 8), (byte) rawAddress3,
+                            (byte) (rawAddress4 >> 24), (byte) (rawAddress4 >> 16), (byte) (rawAddress4 >> 8), (byte) rawAddress4
+                    });
+
+                    String address = inetAddress.getHostAddress();
+
+                    return new DNSRecord(name, QueryType.AAAA, qClass, ttl, length, address);
+                }
+                default -> throw new QueryTypeUnsupportedException();
             }
-            case NS -> {
-                String ns = buffer.readQName();
-                return new DNSRecord(name, QueryType.NS, qClass, ttl, length, ns);
-            }
-            case CNAME -> {
-                String cname = buffer.readQName();
-                return new DNSRecord(name, QueryType.CNAME, qClass, ttl, length, cname);
-            }
-            case MX -> {
-                int priority = buffer.read16b();
-                String mx = buffer.readQName();
-
-                return new DNSRecord(name, QueryType.MX, qClass, ttl, length, priority, mx);
-            }
-            case AAAA -> {
-                int rawAddress1 = buffer.read32b();
-                int rawAddress2 = buffer.read32b();
-                int rawAddress3 = buffer.read32b();
-                int rawAddress4 = buffer.read32b();
-
-                InetAddress inetAddress = Inet6Address.getByAddress(new byte[] {
-                        (byte) (rawAddress1 >> 24), (byte) (rawAddress1 >> 16), (byte) (rawAddress1 >> 8), (byte) rawAddress1,
-                        (byte) (rawAddress2 >> 24), (byte) (rawAddress2 >> 16), (byte) (rawAddress2 >> 8), (byte) rawAddress2,
-                        (byte) (rawAddress3 >> 24), (byte) (rawAddress3 >> 16), (byte) (rawAddress3 >> 8), (byte) rawAddress3,
-                        (byte) (rawAddress4 >> 24), (byte) (rawAddress4 >> 16), (byte) (rawAddress4 >> 8), (byte) rawAddress4
-                });
-
-                String address = inetAddress.getHostAddress();
-
-                return new DNSRecord(name, QueryType.AAAA, qClass, ttl, length, address);
-            }
-            default -> throw new UnsupportedOperationException("Unsupported query type: " + type);
+        } catch (JumpLimitExceededException | BufferPositionOutOfBoundsException | UnknownHostException |
+                 EndOfBufferException e) {
+            throw new ResourceRecordMalformedException();
         }
+
     }
 
-    public void writeInBuffer(PacketBuffer buffer) throws EndOfBufferException, UnknownHostException, UnsupportedOperationException {
-        switch (this.type) {
-            case A -> {
-                buffer.writeQName(name);
-                buffer.write16b(type.getValue());
-                buffer.write16b(1);
-                buffer.write32b(ttl);
-                buffer.write16b(4);
+    public void writeInBuffer(PacketBuffer buffer) throws QueryTypeUnsupportedException {
+        try {
+            switch (this.type) {
+                case A -> {
+                    buffer.writeQName(name);
+                    buffer.write16b(type.getValue());
+                    buffer.write16b(1);
+                    buffer.write32b(ttl);
+                    buffer.write16b(4);
 
-                var rawAddress = InetAddress.getByName(address).getAddress();
-                buffer.write(rawAddress[0]);
-                buffer.write(rawAddress[1]);
-                buffer.write(rawAddress[2]);
-                buffer.write(rawAddress[3]);
-            }
-            case NS, CNAME -> {
-                buffer.writeQName(name);
-                buffer.write16b(type.getValue());
-                buffer.write16b(1);
-                buffer.write32b(ttl);
-
-                int position = buffer.getPosition();
-                buffer.write(0);
-
-                buffer.writeQName(address);
-
-                int size = buffer.getPosition() - (position + 2);
-                buffer.set16b(position, size);
-            }
-            case MX -> {
-                buffer.writeQName(name);
-                buffer.write16b(type.getValue());
-                buffer.write16b(1);
-                buffer.write32b(ttl);
-
-                int position = buffer.getPosition();
-                buffer.write(0);
-
-                buffer.write16b(priority);
-                buffer.writeQName(address);
-
-                int size = buffer.getPosition() - (position + 2);
-                buffer.set16b(position, size);
-            }
-            case AAAA -> {
-                buffer.writeQName(name);
-                buffer.write16b(type.getValue());
-                buffer.write16b(1);
-                buffer.write32b(ttl);
-                buffer.write16b(16);
-
-                byte[] rawAddress = Inet6Address.getByAddress(address.getBytes()).getAddress();
-
-                for (byte b : rawAddress) {
-                    buffer.write(b);
+                    var rawAddress = InetAddress.getByName(address).getAddress();
+                    buffer.write(rawAddress[0]);
+                    buffer.write(rawAddress[1]);
+                    buffer.write(rawAddress[2]);
+                    buffer.write(rawAddress[3]);
                 }
+                case NS, CNAME -> {
+                    buffer.writeQName(name);
+                    buffer.write16b(type.getValue());
+                    buffer.write16b(1);
+                    buffer.write32b(ttl);
+
+                    int position = buffer.getPosition();
+                    buffer.write(0);
+
+                    buffer.writeQName(address);
+
+                    int size = buffer.getPosition() - (position + 2);
+                    buffer.set16b(position, size);
+                }
+                case MX -> {
+                    buffer.writeQName(name);
+                    buffer.write16b(type.getValue());
+                    buffer.write16b(1);
+                    buffer.write32b(ttl);
+
+                    int position = buffer.getPosition();
+                    buffer.write(0);
+
+                    buffer.write16b(priority);
+                    buffer.writeQName(address);
+
+                    int size = buffer.getPosition() - (position + 2);
+                    buffer.set16b(position, size);
+                }
+                case AAAA -> {
+                    buffer.writeQName(name);
+                    buffer.write16b(type.getValue());
+                    buffer.write16b(1);
+                    buffer.write32b(ttl);
+                    buffer.write16b(16);
+
+                    byte[] rawAddress = Inet6Address.getByAddress(address.getBytes()).getAddress();
+
+                    for (byte b : rawAddress) {
+                        buffer.write(b);
+                    }
+                }
+                case UNKNOWN -> throw new QueryTypeUnsupportedException();
             }
-            case UNKNOWN -> throw new UnsupportedOperationException("Unsupported query type: " + type);
+        } catch (UnknownHostException | EndOfBufferException e) {
+            throw new RuntimeException(e);
         }
     }
 

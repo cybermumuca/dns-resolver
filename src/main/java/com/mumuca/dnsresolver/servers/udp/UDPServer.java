@@ -1,9 +1,11 @@
-package com.mumuca.dnsresolver.servers;
+package com.mumuca.dnsresolver.servers.udp;
 
-import com.mumuca.dnsresolver.servers.handlers.UDPQueryHandler;
+import com.mumuca.dnsresolver.servers.udp.processors.UDPQueryProcessor;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,7 +29,7 @@ public class UDPServer implements Runnable {
 
                 socket.receive(queryPacket);
 
-                executorService.submit(new UDPQueryHandler(socket, queryPacket));
+                executorService.submit(new UDPQueryProcessor(socket, queryPacket));
             }
 
         } catch (Exception ex) {

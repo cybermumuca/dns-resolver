@@ -3,15 +3,14 @@
 ## Funcionalidades
 
 - [ ] EDNS
-- [ ] Consultas UDP
+- [x] Consultas UDP
 - [ ] Resolução de Consultas UDP usando DoH (Cloudflare)
 - [ ] Resolução de Consultas UDP usando TCP
 - [ ] Consultas TCP
-- [ ] Lookup
-- [ ] Lookup Recursivo
+- [ ] Consulta Recursiva
 
 - Tipos de Consultas
-  - [ ] A
+  - [x] A
   - [ ] NS
   - [ ] CNAME
   - [ ] MX
@@ -25,8 +24,8 @@
       - [ ] Cache em memória
       - [ ] Sem cache
     - Servidor
-      - [ ] UDP (IPv4)
-      - [ ] UDP (IPv6)
+      - [x] UDP (IPv4)
+      - [x] UDP (IPv6)
       - [ ] TCP (IPv4)
       - [ ] TCP (IPv6)
     - NameServers

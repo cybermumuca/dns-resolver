@@ -1,6 +1,6 @@
 package com.mumuca.dnsresolver;
 
-import com.mumuca.dnsresolver.servers.UDPServer;
+import com.mumuca.dnsresolver.servers.udp.UDPServer;
 
 public class DNSResolver {
     public static void main(String[] args) {

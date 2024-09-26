@@ -1,8 +1,8 @@
-package com.mumuca.dnsresolver.utils;
+package com.mumuca.dnsresolver.dns.utils;
 
-import com.mumuca.dnsresolver.utils.exceptions.BufferPositionOutOfBoundsException;
-import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
-import com.mumuca.dnsresolver.utils.exceptions.JumpLimitExceededException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.BufferPositionOutOfBoundsException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.dns.utils.exceptions.JumpLimitExceededException;
 
 import java.nio.charset.StandardCharsets;
 
@@ -79,7 +79,6 @@ public class PacketBuffer {
 
         while (true) {
             if (jumpsPerformed > maxJumps) {
-
                 throw new JumpLimitExceededException("Limit of " + maxJumps + " jumps exceeded.");
             }
 

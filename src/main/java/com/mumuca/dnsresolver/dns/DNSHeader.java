@@ -1,8 +1,9 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.enums.ResultCode;
-import com.mumuca.dnsresolver.utils.PacketBuffer;
-import com.mumuca.dnsresolver.utils.exceptions.EndOfBufferException;
+import com.mumuca.dnsresolver.dns.exceptions.InvalidHeaderSizeException;
+import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
+import com.mumuca.dnsresolver.dns.utils.exceptions.EndOfBufferException;
 
 public class DNSHeader {
     /**
@@ -60,43 +61,71 @@ public class DNSHeader {
         this.resultCode = ResultCode.NO_ERROR;
     }
 
-    public void readBuffer(PacketBuffer buffer) throws EndOfBufferException {
-        this.id = buffer.read16b();
-        var flags = buffer.read16b();
-
-        this.query = ((flags >> 15) & 0b1) == 0;
-        this.opcode = (short) ((flags >> 11) & 0b1111);
-        this.authoritativeAnswer = ((flags >> 10) & 0b1) > 0;
-        this.truncatedMessage = ((flags >> 9) & 0b1) > 0;
-        this.recursionDesired = ((flags >> 8) & 0b1) > 0;
-        this.recursionAvailable = ((flags >> 7) & 0b1) > 0;
-        this.z = (short) ((flags >> 4) & 0b111);
-        this.resultCode = ResultCode.fromCode(flags & 0b1111);
-
-        this.questionCount = buffer.read16b();
-        this.answerRecordCount = buffer.read16b();
-        this.authoritativeRecordCount = buffer.read16b();
-        this.additionalRecordCount = buffer.read16b();
+    public DNSHeader(int id, boolean query, short opcode, boolean recursionDesired, boolean recursionAvailable, ResultCode resultCode) {
+        this.id = id;
+        this.query = query;
+        this.opcode = opcode;
+        this.authoritativeAnswer = false;
+        this.truncatedMessage = false;
+        this.recursionDesired = recursionDesired;
+        this.recursionAvailable = recursionAvailable;
+        this.z = 0;
+        this.resultCode = resultCode;
+        this.questionCount = 0;
+        this.answerRecordCount = 0;
+        this.authoritativeRecordCount = 0;
+        this.additionalRecordCount = 0;
     }
 
-    public void writeInBuffer(PacketBuffer buffer) throws EndOfBufferException {
-        buffer.write16b(this.id);
+    public static DNSHeader fromBuffer(PacketBuffer buffer) throws InvalidHeaderSizeException {
+        var dnsHeader = new DNSHeader();
 
-        int flags = (this.query ? 0 : 1) << 15;
-        flags |= (this.opcode & 0xF) << 11;
-        flags |= (this.authoritativeAnswer ? 1 : 0) << 10;
-        flags |= (this.truncatedMessage ? 1 : 0) << 9;
-        flags |= (this.recursionDesired ? 1 : 0) << 8;
-        flags |= (this.recursionAvailable ? 1 : 0) << 7;
-        flags |= (this.z & 0x7) << 4;
-        flags |= this.resultCode.getCode() & 0xF;
+        try {
+            dnsHeader.id = buffer.read16b();
+            var flags = buffer.read16b();
 
-        buffer.write16b(flags);
+            dnsHeader.query = ((flags >> 15) & 0b1) == 0;
+            dnsHeader.opcode = (short) ((flags >> 11) & 0b1111);
+            dnsHeader.authoritativeAnswer = ((flags >> 10) & 0b1) > 0;
+            dnsHeader.truncatedMessage = ((flags >> 9) & 0b1) > 0;
+            dnsHeader.recursionDesired = ((flags >> 8) & 0b1) > 0;
+            dnsHeader.recursionAvailable = ((flags >> 7) & 0b1) > 0;
+            dnsHeader.z = (short) ((flags >> 4) & 0b111);
+            dnsHeader.resultCode = ResultCode.fromCode(flags & 0b1111);
 
-        buffer.write16b(questionCount);
-        buffer.write16b(answerRecordCount);
-        buffer.write16b(authoritativeRecordCount);
-        buffer.write16b(additionalRecordCount);
+            dnsHeader.questionCount = buffer.read16b();
+            dnsHeader.answerRecordCount = buffer.read16b();
+            dnsHeader.authoritativeRecordCount = buffer.read16b();
+            dnsHeader.additionalRecordCount = buffer.read16b();
+
+            return dnsHeader;
+        } catch (EndOfBufferException e) {
+            throw new InvalidHeaderSizeException();
+        }
+    }
+
+    public void writeToBuffer(PacketBuffer buffer) throws InvalidHeaderSizeException {
+        try {
+            buffer.write16b(this.id);
+
+            int flags = (this.query ? 0 : 1) << 15;
+            flags |= (this.opcode & 0xF) << 11;
+            flags |= (this.authoritativeAnswer ? 1 : 0) << 10;
+            flags |= (this.truncatedMessage ? 1 : 0) << 9;
+            flags |= (this.recursionDesired ? 1 : 0) << 8;
+            flags |= (this.recursionAvailable ? 1 : 0) << 7;
+            flags |= (this.z & 0x7) << 4;
+            flags |= this.resultCode.getCode() & 0xF;
+
+            buffer.write16b(flags);
+
+            buffer.write16b(questionCount);
+            buffer.write16b(answerRecordCount);
+            buffer.write16b(authoritativeRecordCount);
+            buffer.write16b(additionalRecordCount);
+        } catch (EndOfBufferException e) {
+            throw new InvalidHeaderSizeException();
+        }
     }
 
     @Override

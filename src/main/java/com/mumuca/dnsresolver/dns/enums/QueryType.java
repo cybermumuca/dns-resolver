@@ -1,6 +1,6 @@
 package com.mumuca.dnsresolver.dns.enums;
 
-import com.mumuca.dnsresolver.dns.exceptions.NotImplementedException;
+import com.mumuca.dnsresolver.servers.exceptions.NotImplementedException;
 
 public enum QueryType {
     /**

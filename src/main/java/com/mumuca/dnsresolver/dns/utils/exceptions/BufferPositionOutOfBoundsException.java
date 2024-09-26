@@ -1,4 +1,4 @@
-package com.mumuca.dnsresolver.utils.exceptions;
+package com.mumuca.dnsresolver.dns.utils.exceptions;
 
 public class BufferPositionOutOfBoundsException extends Exception {
     public BufferPositionOutOfBoundsException() {
