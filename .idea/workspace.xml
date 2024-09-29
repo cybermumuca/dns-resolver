@@ -5,25 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ea5a36d-f3c0-43d0-a545-ae178155d7dd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/UDPQueryHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/DNSResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/DNSResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSHeader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSHeader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSPacket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSQuestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSQuestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/enums/QueryType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/enums/QueryType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/exceptions/FormatErrorException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/exceptions/FormatErrorException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/exceptions/NotImplementedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/exceptions/NotImplementedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/exceptions/RefusedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/exceptions/RefusedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/exceptions/ServerFailureException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/exceptions/ServerFailureException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/UDPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/UDPServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/handlers/UDPQueryHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/utils/PacketBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/utils/PacketBuffer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/utils/exceptions/BufferPositionOutOfBoundsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/utils/exceptions/BufferPositionOutOfBoundsException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/utils/exceptions/EndOfBufferException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/utils/exceptions/EndOfBufferException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/utils/exceptions/JumpLimitExceededException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/utils/exceptions/JumpLimitExceededException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/UDPQueryHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/processors/UDPQueryProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/processors/UDPQueryProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +18,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -56,7 +41,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DNSPacket.executor": "Run",
-    "Application.DNSResolver.executor": "Run",
+    "Application.DNSResolver.executor": "Debug",
     "Application.DnsServer.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -112,5 +97,20 @@
       <updated>1726944979599</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/processors/UDPQueryProcessor.java</url>
+          <line>26</line>
+          <properties class="com.mumuca.dnsresolver.servers.udp.processors.UDPQueryProcessor" method="process">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
