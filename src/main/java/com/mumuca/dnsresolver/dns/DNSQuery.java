@@ -24,7 +24,7 @@ public class DNSQuery {
         return dnsQuestion;
     }
 
-    public static DNSQuery of(int id, boolean withRecursion, String name, QueryType queryType, short qclass) {
+    public static DNSQuery from(int id, boolean withRecursion, String name, QueryType queryType, short qclass) {
         DNSHeader dnsHeader = new DNSHeader();
 
         dnsHeader.id = id;

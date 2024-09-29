@@ -16,7 +16,7 @@ import java.net.InetAddress;
 public class UDPResolver {
     public static DNSResponse query(int id, boolean withRecursion, String name, QueryType queryType, short qClass) {
         try (var socket = new DatagramSocket()) {
-            DNSQuery dnsQuery = DNSQuery.of(id, withRecursion, name, queryType, qClass);
+            DNSQuery dnsQuery = DNSQuery.from(id, withRecursion, name, queryType, qClass);
 
             DatagramPacket dnsQueryPacket = UDPQuerySerializer.serialize(dnsQuery);
 
