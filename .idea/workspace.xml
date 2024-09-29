@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ea5a36d-f3c0-43d0-a545-ae178155d7dd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/contexts/DNSQueryContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/AbstractHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/HeaderDeserializationHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/QueryHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/QuestionDeserializationHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/dns/DNSQuery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/handlers/UDPQueryHandler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/processors/UDPQueryProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/processors/UDPQueryProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/resolvers/UDPResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mumuca/dnsresolver/servers/udp/resolvers/UDPResolver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +48,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DNSPacket.executor": "Run",
-    "Application.DNSResolver.executor": "Debug",
+    "Application.DNSResolver.executor": "Run",
     "Application.DnsServer.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
