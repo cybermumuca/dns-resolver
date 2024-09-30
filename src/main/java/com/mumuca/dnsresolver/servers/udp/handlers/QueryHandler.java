@@ -22,6 +22,7 @@ public class QueryHandler extends AbstractHandler {
             DNSResponse dnsResponse = UDPResolver.query(dnsHeader.id, dnsHeader.recursionDesired, dnsQuestion.qName, dnsQuestion.qType, dnsQuestion.qClass);
             sendResponse(context, dnsResponse);
         } catch (DNSServerException e) {
+            e.printStackTrace();
             sendError(context, context.getDnsHeader().id, getResultCode(e));
         }
     }

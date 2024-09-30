@@ -21,8 +21,10 @@ public class HeaderDeserializationHandler extends AbstractHandler {
                 next.handle(context);
             }
         } catch (UnableToRespondException e) {
+            e.printStackTrace();
             return;
         } catch (DNSServerException e) {
+            e.printStackTrace();
             sendError(context, null, getResultCode(e));
         }
     }

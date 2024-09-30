@@ -21,8 +21,10 @@ public class QuestionDeserializationHandler extends AbstractHandler {
             }
 
         } catch (DNSServerException e) {
+            e.printStackTrace();
             sendError(context, context.getDnsHeader().id, getResultCode(e));
         } catch (Exception e) {
+            e.printStackTrace();
             sendError(context, context.getDnsHeader().id, ResultCode.SERVER_FAILURE);
         }
     }

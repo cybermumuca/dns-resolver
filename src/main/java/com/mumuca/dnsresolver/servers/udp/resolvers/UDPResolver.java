@@ -20,7 +20,7 @@ public class UDPResolver {
 
             DatagramPacket dnsQueryPacket = UDPQuerySerializer.serialize(dnsQuery);
 
-            dnsQueryPacket.setAddress(InetAddress.getByName("8.8.8.8"));
+            dnsQueryPacket.setAddress(InetAddress.getByName("1.1.1.1"));
             dnsQueryPacket.setPort(53);
 
             socket.send(dnsQueryPacket);
