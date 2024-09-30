@@ -182,7 +182,7 @@ public class DNSRecord {
                     buffer.write32b(ttl);
                     buffer.write16b(16);
 
-                    byte[] rawAddress = Inet6Address.getByAddress(address.getBytes()).getAddress();
+                    byte[] rawAddress = Inet6Address.getByName(address).getAddress();
 
                     for (byte b : rawAddress) {
                         buffer.write(b);
