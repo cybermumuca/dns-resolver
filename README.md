@@ -11,6 +11,14 @@
 ## 📜 Sumário
 
 - [📋 Sobre o Projeto](#-sobre-o-projeto)
+- [📚 Introdução ao DNS]()
+  - [Oque é DNS]() 
+  - [Como o DNS funciona?]() 
+  - [Tipos de Registros DNS]()
+- [⚠️ Ataques ao DNS]()
+  - [DNS Spoofing (Cache Poisoning)]() 
+  - [Ataques DDoS em DNS]() 
+  - [Amplificação de DNS]() 
 - [💡 Funcionalidades](#-funcionalidades)
 - [📦 Pré-requisitos](#-pré-requisitos)
 - [🔧 Configurando o Projeto](#-configurando-o-projeto)
@@ -20,8 +28,20 @@
 
 ## 📋 Sobre o Projeto
 
-> [!TIP]
-> Este projeto visa ser um estudo prático sobre o funcionamento do DNS e sua implementação. Apesar disso, ele também é uma solução leve e funcional para um DNS Resolver self-hosted.
+Este projeto tem dois objetivos principais: fornecer uma implementação prática de um **DNS Resolver** completamente funcional, rápido e privado, além de servir como um recurso educacional sobre o funcionamento do DNS e as ameaças relacionadas.
+
+O projeto segue as especificações das seguintes RFCs:
+- [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035), que define a implementação básica de um resolver DNS.
+- [RFC 3425](https://datatracker.ietf.org/doc/html/rfc3425), que trata da descontinuação de consultas inversas pelo DNS.
+- [RFC 3596](https://datatracker.ietf.org/doc/html/rfc3596), que adiciona suporte para registros DNS relacionados ao IPv6 (registro `AAAA`).
+- [RFC 7766](https://datatracker.ietf.org/doc/html/rfc7766), que especifica o uso de DNS sobre TCP para consultas maiores.
+
+Embora este projeto não implemente diretamente o protocolo **DNS over HTTPS (DoH)**, como definido na [RFC 8484](https://datatracker.ietf.org/doc/html/rfc8484), ele repassa consultas DNS para o servidor da **Cloudflare**, que utiliza DoH para melhorar a segurança e privacidade das resoluções DNS.
+
+Essas RFCs formam a base teórica necessária para o desenvolvimento prático deste projeto.
+
+> [!CAUTION]
+> É **desencorajado** o uso dessa solução em ambientes que necessitam de alta disponibilidade e robustez.
 
 ## 💡 Funcionalidades
 
@@ -37,7 +57,7 @@
   - [ ] NS
   - [ ] CNAME
   - [ ] MX
-  - [ ] AAAA
+  - [x] AAAA
   - [ ] SOA
 
 - Configurações
