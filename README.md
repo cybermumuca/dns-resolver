@@ -1,4 +1,4 @@
-<h1 align="center">DNS Resolver</h1>
+<h1 align="center">🚧 DNS Resolver 🚧</h1>
 
 <p align="center">
   <a><img alt="jdk" src="https://img.shields.io/badge/JDK%2021-007396?style=for-the-badge&logo=openjdk&logoColor=white"></a>
@@ -6,6 +6,7 @@
 </p>
 
 <p align="center">DNS Resolver rápido e privado.</p>
+<p align="center">⚠️ <strong>Em desenvolvimento</strong> ⚠️</p>
 
 ## 📜 Sumário
 
