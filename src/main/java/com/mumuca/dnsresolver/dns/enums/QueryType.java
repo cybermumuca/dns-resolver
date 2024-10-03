@@ -24,6 +24,7 @@ public enum QueryType {
     A(1),
     NS(2),
     CNAME(5),
+    SOA(6),
     MX(15),
     AAAA(28);
 

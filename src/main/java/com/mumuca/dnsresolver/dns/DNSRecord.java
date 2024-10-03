@@ -72,6 +72,18 @@ public class DNSRecord {
                     String cname = buffer.readQName();
                     return new CNAME(name, qClass, ttl, length, cname);
                 }
+                case SOA -> {
+                    String mname = buffer.readQName();
+                    String rname = buffer.readQName();
+
+                    int serial = buffer.read32b();
+                    int refresh = buffer.read32b();
+                    int retry = buffer.read32b();
+                    int expire = buffer.read32b();
+                    int minimum = buffer.read32b();
+
+                    return new SOA(name, qClass, ttl, length, mname, rname, serial, refresh, retry, expire, minimum);
+                }
                 case MX -> {
                     int priority = buffer.read16b();
                     String mx = buffer.readQName();
