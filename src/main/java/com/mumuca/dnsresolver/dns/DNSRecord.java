@@ -14,35 +14,11 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * A classe {@code DNSRecord} fornece métodos estáticos para manipulação e criação de registros
+ * de recursos DNS a partir de um buffer.
+ */
 public class DNSRecord {
-    /**
-     * Representa o RR (Resource Record) de uma mensagem DNS.
-     *
-     * <p>Esta classe encapsula os detalhes de um registro de recurso DNS, conforme
-     * definido na <a href="https://datatracker.ietf.org/doc/html/rfc1035#section-4.1.3">RFC 1035</a>.
-     *
-     * <p><strong>Atributos:</strong>
-     * <ul>
-     *   <li><strong>name</strong> - O nome do domínio associado a este registro
-     *   de recurso.</li>
-     *   <li><strong>type</strong> - O tipo do registro DNS, que especifica o
-     *   tipo de informação contida (por exemplo, A, AAAA, CNAME, etc.).</li>
-     *   <li><strong>qClass</strong> - A classe do registro, definida
-     *   como 1 para registros da Internet.</li>
-     *   <li><strong>ttl</strong> - O tempo de vida (Time to Live) do registro,
-     *   que indica quanto tempo ele deve ser mantido em cache.</li>
-     *   <li><strong>length</strong> - O comprimento dos dados do registro em bytes.</li>
-     *   <li><strong>address</strong> - O endereço associado ao registro, que pode ser
-     *   um endereço IP ou outro tipo de dado, dependendo do tipo do registro.
-     *   </li>
-     *   <li><strong>priority</strong> - A prioridade do registro, aplicável
-     *   especialmente para registros MX (Mail Exchange), onde uma prioridade mais baixa
-     *   indica uma preferência maior para o servidor de e-mail.</li>
-     * </ul>
-     *
-     * @see QueryType
-     */
-
     public static ResourceRecord fromBuffer(PacketBuffer buffer) throws QueryTypeUnsupportedException, ResourceRecordMalformedException {
         try {
             String name = buffer.readQName();
@@ -113,6 +89,5 @@ public class DNSRecord {
                  EndOfBufferException e) {
             throw new ResourceRecordMalformedException();
         }
-
     }
 }
