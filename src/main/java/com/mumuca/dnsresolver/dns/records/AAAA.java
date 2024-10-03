@@ -15,7 +15,7 @@ public record AAAA(String name, short qClass, int ttl, int length, String addres
     }
 
     @Override
-    public void writeInBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(PacketBuffer buffer) {
         try {
             buffer.writeQName(name());
             buffer.write16b(type().getValue());

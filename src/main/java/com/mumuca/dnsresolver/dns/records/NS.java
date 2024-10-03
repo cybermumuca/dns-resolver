@@ -11,7 +11,7 @@ public record NS(String name, short qClass, int ttl, int length, String ns) impl
     }
 
     @Override
-    public void writeInBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(PacketBuffer buffer) {
         try {
             buffer.writeQName(name());
             buffer.write16b(type().getValue());
