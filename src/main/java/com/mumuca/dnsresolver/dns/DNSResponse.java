@@ -1,6 +1,7 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.exceptions.*;
+import com.mumuca.dnsresolver.dns.records.ResourceRecord;
 import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
 
 import java.util.ArrayList;
@@ -10,11 +11,11 @@ public class DNSResponse {
 
     private final DNSHeader dnsHeader;
     private final DNSQuestion dnsQuestion;
-    private final List<DNSRecord> answerRecords;
-    private final List<DNSRecord> authorityRecords;
-    private final List<DNSRecord> additionalRecords;
+    private final List<ResourceRecord> answerRecords;
+    private final List<ResourceRecord> authorityRecords;
+    private final List<ResourceRecord> additionalRecords;
 
-    private DNSResponse(DNSHeader dnsHeader, DNSQuestion dnsQuestion, List<DNSRecord> answerRecords, List<DNSRecord> authorityRecords, List<DNSRecord> additionalRecords) {
+    private DNSResponse(DNSHeader dnsHeader, DNSQuestion dnsQuestion, List<ResourceRecord> answerRecords, List<ResourceRecord> authorityRecords, List<ResourceRecord> additionalRecords) {
         this.dnsHeader = dnsHeader;
         this.dnsQuestion = dnsQuestion;
         this.answerRecords = answerRecords;
@@ -30,15 +31,15 @@ public class DNSResponse {
         return dnsQuestion;
     }
 
-    public List<DNSRecord> getAnswerRecords() {
+    public List<ResourceRecord> getAnswerRecords() {
         return answerRecords;
     }
 
-    public List<DNSRecord> getAuthorityRecords() {
+    public List<ResourceRecord> getAuthorityRecords() {
         return authorityRecords;
     }
 
-    public List<DNSRecord> getAdditionalRecords() {
+    public List<ResourceRecord> getAdditionalRecords() {
         return additionalRecords;
     }
 
@@ -54,24 +55,24 @@ public class DNSResponse {
             dnsQuestions.add(question);
         }
 
-        List<DNSRecord> answerRecords = new ArrayList<>(dnsHeader.answerRecordCount);
+        List<ResourceRecord> answerRecords = new ArrayList<>(dnsHeader.answerRecordCount);
 
         for (short i = 0; i < dnsHeader.answerRecordCount; i++) {
-            DNSRecord answerRecord = DNSRecord.fromBuffer(buffer);
+            ResourceRecord answerRecord = DNSRecord.fromBuffer(buffer);
             answerRecords.add(answerRecord);
         }
 
-        List<DNSRecord> authorityRecords = new ArrayList<>(dnsHeader.authoritativeRecordCount);
+        List<ResourceRecord> authorityRecords = new ArrayList<>(dnsHeader.authoritativeRecordCount);
 
         for (short i = 0; i < dnsHeader.authoritativeRecordCount; i++) {
-            DNSRecord authorityRecord = DNSRecord.fromBuffer(buffer);
+            ResourceRecord authorityRecord = DNSRecord.fromBuffer(buffer);
             authorityRecords.add(authorityRecord);
         }
 
-        List<DNSRecord> additionalRecords = new ArrayList<>(dnsHeader.additionalRecordCount);
+        List<ResourceRecord> additionalRecords = new ArrayList<>(dnsHeader.additionalRecordCount);
 
         for (short i = 0; i < dnsHeader.additionalRecordCount; i++) {
-            DNSRecord additionalRecord = DNSRecord.fromBuffer(buffer);
+            ResourceRecord additionalRecord = DNSRecord.fromBuffer(buffer);
             additionalRecords.add(additionalRecord);
         }
         
@@ -83,16 +84,16 @@ public class DNSResponse {
 
         this.dnsQuestion.writeToBuffer(buffer);
 
-        for (DNSRecord answerRecord : answerRecords) {
-            answerRecord.writeInBuffer(buffer);
+        for (ResourceRecord answerRecord : answerRecords) {
+            answerRecord.writeToBuffer(buffer);
         }
 
-        for (DNSRecord authorityRecord : authorityRecords) {
-            authorityRecord.writeInBuffer(buffer);
+        for (ResourceRecord authorityRecord : authorityRecords) {
+            authorityRecord.writeToBuffer(buffer);
         }
 
-        for (DNSRecord additionalRecord : additionalRecords) {
-            additionalRecord.writeInBuffer(buffer);
+        for (ResourceRecord additionalRecord : additionalRecords) {
+            additionalRecord.writeToBuffer(buffer);
         }
     }
 }

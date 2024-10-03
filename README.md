@@ -54,9 +54,9 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
 
 - Tipos de Consultas
   - [x] A
-  - [ ] NS
+  - [x] NS
   - [ ] CNAME
-  - [ ] MX
+  - [x] MX
   - [x] AAAA
   - [ ] SOA
 

@@ -3,6 +3,7 @@ package com.mumuca.dnsresolver.dns;
 import com.mumuca.dnsresolver.dns.enums.QueryType;
 import com.mumuca.dnsresolver.dns.exceptions.QueryTypeUnsupportedException;
 import com.mumuca.dnsresolver.dns.exceptions.ResourceRecordMalformedException;
+import com.mumuca.dnsresolver.dns.records.*;
 import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
 import com.mumuca.dnsresolver.dns.utils.exceptions.BufferPositionOutOfBoundsException;
 import com.mumuca.dnsresolver.dns.utils.exceptions.EndOfBufferException;
@@ -42,34 +43,7 @@ public class DNSRecord {
      * @see QueryType
      */
 
-    public String name;
-    public QueryType type;
-    public short qClass;
-    public int ttl;
-    public int length;
-    public String address;
-    public int priority;
-
-    private DNSRecord(String name, QueryType type, short qClass, int ttl, int length, String address) {
-        this.name = name;
-        this.type = type;
-        this.qClass = qClass;
-        this.ttl = ttl;
-        this.length = length;
-        this.address = address;
-    }
-
-    private DNSRecord(String name, QueryType type, short qClass, int ttl, int length, int priority, String mx) {
-        this.name = name;
-        this.type = type;
-        this.qClass = qClass;
-        this.ttl = ttl;
-        this.length = length;
-        this.priority = priority;
-        this.address = mx;
-    }
-
-    public static DNSRecord fromBuffer(PacketBuffer buffer) throws QueryTypeUnsupportedException, ResourceRecordMalformedException {
+    public static ResourceRecord fromBuffer(PacketBuffer buffer) throws QueryTypeUnsupportedException, ResourceRecordMalformedException {
         try {
             String name = buffer.readQName();
 
@@ -88,21 +62,21 @@ public class DNSRecord {
                             (byte) (rawAddress & 0xFF)
                     });
                     String address = inetAddress.getHostAddress();
-                    return new DNSRecord(name, QueryType.A, qClass, ttl, length, address);
+                    return new A(name, qClass, ttl, length, address);
                 }
                 case NS -> {
                     String ns = buffer.readQName();
-                    return new DNSRecord(name, QueryType.NS, qClass, ttl, length, ns);
+                    return new NS(name, qClass, ttl, length, ns);
                 }
                 case CNAME -> {
                     String cname = buffer.readQName();
-                    return new DNSRecord(name, QueryType.CNAME, qClass, ttl, length, cname);
+                    return new CNAME(name, qClass, ttl, length, cname);
                 }
                 case MX -> {
                     int priority = buffer.read16b();
                     String mx = buffer.readQName();
 
-                    return new DNSRecord(name, QueryType.MX, qClass, ttl, length, priority, mx);
+                    return new MX(name, qClass, ttl, length, priority, mx);
                 }
                 case AAAA -> {
                     int rawAddress1 = buffer.read32b();
@@ -119,7 +93,7 @@ public class DNSRecord {
 
                     String address = inetAddress.getHostAddress();
 
-                    return new DNSRecord(name, QueryType.AAAA, qClass, ttl, length, address);
+                    return new AAAA(name, qClass, ttl, length, address);
                 }
                 default -> throw new QueryTypeUnsupportedException();
             }
@@ -128,83 +102,5 @@ public class DNSRecord {
             throw new ResourceRecordMalformedException();
         }
 
-    }
-
-    public void writeInBuffer(PacketBuffer buffer) throws QueryTypeUnsupportedException {
-        try {
-            switch (this.type) {
-                case A -> {
-                    buffer.writeQName(name);
-                    buffer.write16b(type.getValue());
-                    buffer.write16b(1);
-                    buffer.write32b(ttl);
-                    buffer.write16b(4);
-
-                    var rawAddress = InetAddress.getByName(address).getAddress();
-                    buffer.write(rawAddress[0]);
-                    buffer.write(rawAddress[1]);
-                    buffer.write(rawAddress[2]);
-                    buffer.write(rawAddress[3]);
-                }
-                case NS, CNAME -> {
-                    buffer.writeQName(name);
-                    buffer.write16b(type.getValue());
-                    buffer.write16b(1);
-                    buffer.write32b(ttl);
-
-                    int position = buffer.getPosition();
-                    buffer.write(0);
-
-                    buffer.writeQName(address);
-
-                    int size = buffer.getPosition() - (position + 2);
-                    buffer.set16b(position, size);
-                }
-                case MX -> {
-                    buffer.writeQName(name);
-                    buffer.write16b(type.getValue());
-                    buffer.write16b(1);
-                    buffer.write32b(ttl);
-
-                    int position = buffer.getPosition();
-                    buffer.write(0);
-
-                    buffer.write16b(priority);
-                    buffer.writeQName(address);
-
-                    int size = buffer.getPosition() - (position + 2);
-                    buffer.set16b(position, size);
-                }
-                case AAAA -> {
-                    buffer.writeQName(name);
-                    buffer.write16b(type.getValue());
-                    buffer.write16b(1);
-                    buffer.write32b(ttl);
-                    buffer.write16b(16);
-
-                    byte[] rawAddress = Inet6Address.getByName(address).getAddress();
-
-                    for (byte b : rawAddress) {
-                        buffer.write(b);
-                    }
-                }
-                case UNKNOWN -> throw new QueryTypeUnsupportedException();
-            }
-        } catch (UnknownHostException | EndOfBufferException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "DNSRecord{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", qClass=" + qClass +
-                ", ttl=" + ttl +
-                ", length=" + length +
-                ", priority=" + priority +
-                ", address='" + address + '\'' +
-                '}';
     }
 }
