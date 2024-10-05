@@ -60,6 +60,10 @@ public class DNSRecord {
 
                     return new SOA(name, qClass, ttl, length, mname, rname, serial, refresh, retry, expire, minimum);
                 }
+                case PTR -> {
+                    String domain = buffer.readQName();
+                    return new PTR(name, qClass, ttl, length, domain);
+                }
                 case MX -> {
                     int priority = buffer.read16b();
                     String mx = buffer.readQName();

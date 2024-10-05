@@ -14,11 +14,12 @@ import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
  *     <li>{@link NS} - Registro de servidor de nomes.</li>
  *     <li>{@link CNAME} - Registro de nome canônico.</li>
  *     <li>{@link SOA} - Registro de início de autoridade.</li>
+ *     <li>{@link PTR} - Registro de ponteiro.</li>
  *     <li>{@link MX} - Registro de troca de e-mail.</li>
  *     <li>{@link AAAA} - Registro de endereço IPv6.</li>
  * </ul>
  */
-public sealed interface ResourceRecord permits A, NS, CNAME, SOA, MX, AAAA {
+public sealed interface ResourceRecord permits A, NS, CNAME, SOA, PTR, MX, AAAA {
     String name();
     QueryType type();
     short qClass();

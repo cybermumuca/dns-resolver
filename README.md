@@ -59,7 +59,7 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
   - [x] MX
   - [x] AAAA
   - [x] SOA
-  - [ ] PTR
+  - [x] PTR
 
 - Configurações
     - Cache

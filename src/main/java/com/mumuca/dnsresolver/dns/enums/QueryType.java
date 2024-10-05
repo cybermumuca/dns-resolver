@@ -16,6 +16,7 @@ import com.mumuca.dnsresolver.servers.exceptions.NotImplementedException;
  *   <li><strong>NS</strong> (2) - Representa um registro de servidor de nomes, que aponta para o servidor de nomes autoritativo de um domínio.</li>
  *   <li><strong>CNAME</strong> (5) - Representa um registro de nome canônico, que mapeia um nome de domínio para outro (alias).</li>
  *   <li><strong>SOA</strong> (6) - Representa um registro de início de autoridade, que contém informações administrativas sobre a zona.</li>
+ *   <li><strong>PTR</strong> (12) - Representa um registro de ponteiro, usado em consultas DNS reversas para mapear um endereço IP a um nome de domínio.</li>
  *   <li><strong>MX</strong> (15) - Representa um registro de troca de mensagens (Mail Exchange), que aponta para o servidor responsável pelo recebimento de e-mails em nome de um domínio.</li>
  *   <li><strong>AAAA</strong> (28) - Representa um registro de endereço IPv6.</li>
  * </ul>
@@ -26,6 +27,7 @@ public enum QueryType {
     NS(2),
     CNAME(5),
     SOA(6),
+    PTR(12),
     MX(15),
     AAAA(28);
 
