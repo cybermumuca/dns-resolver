@@ -28,7 +28,7 @@ import com.mumuca.dnsresolver.dns.utils.exceptions.EndOfBufferException;
  *     <li><b>minimum</b>: O tempo (em segundos) que um registro pode ser armazenado em cache, utilizado como TTL para registros que não têm um TTL definido.</li>
  * </ul>
  */
-public record SOA(String name, short qClass, int ttl, int length, String mname, String rname, int serial, int refresh, int retry, int expire, int minimum) implements ResourceRecord {
+public record SOA(String name, short qClass, int ttl, int length, String mname, String rname, long serial, int refresh, int retry, long expire, int minimum) implements ResourceRecord {
     @Override
     public QueryType type() {
         return QueryType.SOA;
@@ -46,13 +46,12 @@ public record SOA(String name, short qClass, int ttl, int length, String mname, 
             buffer.write16b(0);
 
             buffer.writeQName(mname());
-
             buffer.writeQName(rname());
 
-            buffer.write32b(serial());
+            buffer.write32b((int) (serial() & 0xFFFFFFFFL)); // truncated value
             buffer.write32b(refresh());
             buffer.write32b(retry());
-            buffer.write32b(expire());
+            buffer.write32b((int) (expire() & 0xFFFFFFFFL)); // truncated value
             buffer.write32b(minimum());
 
             int size = buffer.getPosition() - (position + 2);

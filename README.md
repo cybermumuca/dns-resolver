@@ -47,7 +47,7 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
 
 - [ ] EDNS
 - [x] Consultas UDP
-- [ ] Resolução de Consultas UDP usando DoH (Cloudflare)
+- [x] Resolução de Consultas UDP usando DoH (Cloudflare)
 - [ ] Resolução de Consultas UDP usando TCP
 - [ ] Consultas TCP
 - [ ] Consulta Recursiva
@@ -61,13 +61,24 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
   - [x] SOA
   - [x] PTR
 
+- Blacklist para sites de:
+  - [ ] Jogos de Azar
+  - [ ] Pornôgrafia
+  - [ ] Redes sociais
+  - [ ] Rastreadores
+  - [ ] Anúncios
+  - [ ] Fake news
+  - [ ] Malwares
+
+- [ ] Renovação de Cache em segundo plano
+
 - Configurações
-    - Cache
+    - Caches
       - [ ] Cache por arquivo
       - [ ] Cache usando Redis
       - [ ] Cache em memória
       - [ ] Sem cache
-    - Servidor
+    - Servidores
       - [x] UDP (IPv4)
       - [x] UDP (IPv6)
       - [ ] TCP (IPv4)
@@ -75,7 +86,14 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
     - NameServers
       - [ ] Lista de Nameservers personalizada
       - [ ] Nameserver aleatório
-    - [ ] Lista de Nomes proibidos
+    - Resolvers
+      - [x] Cloudflare DoH Resolver
+      - [] Cloudflare DNS Resolver
+      - [] Google DNS Resolver
+      - [] UDP DNS Resolver
+      - [] TCP DNS Resolver
+    - BlackList
+      - [ ] Lista de Nomes proibidos
 
 ## 📦 Pré-requisitos
 

@@ -15,6 +15,7 @@ public class HeaderDeserializationHandler extends AbstractHandler {
         try {
             DNSHeader dnsHeader = UDPQueryHeaderDeserializer.deserialize(context.getQueryPacketDataBuffer());
             UDPQueryHeaderDeserializer.checkDNSHeader(dnsHeader);
+            dnsHeader.setRecursionAvailable(true);
             context.setDnsHeader(dnsHeader);
 
             if (next != null) {

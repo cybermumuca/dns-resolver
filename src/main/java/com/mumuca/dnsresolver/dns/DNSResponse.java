@@ -15,6 +15,14 @@ public class DNSResponse {
     private final List<ResourceRecord> authorityRecords;
     private final List<ResourceRecord> additionalRecords;
 
+    public DNSResponse(DNSQuery dnsQuery, List<ResourceRecord> answerRecords, List<ResourceRecord> authorityRecords) {
+        this.dnsHeader = dnsQuery.getHeader();
+        this.dnsQuestion = dnsQuery.getQuestion();
+        this.answerRecords = answerRecords;
+        this.authorityRecords = authorityRecords;
+        this.additionalRecords = new ArrayList<>(0);
+    }
+
     private DNSResponse(DNSHeader dnsHeader, DNSQuestion dnsQuestion, List<ResourceRecord> answerRecords, List<ResourceRecord> authorityRecords, List<ResourceRecord> additionalRecords) {
         this.dnsHeader = dnsHeader;
         this.dnsQuestion = dnsQuestion;
@@ -27,7 +35,7 @@ public class DNSResponse {
         return dnsHeader;
     }
 
-    public DNSQuestion getQuery() {
+    public DNSQuestion getQuestion() {
         return dnsQuestion;
     }
 
@@ -47,31 +55,31 @@ public class DNSResponse {
     public static DNSResponse fromBuffer(PacketBuffer buffer) throws InvalidHeaderSizeException, SuspiciousDomainNamePayloadException, QuestionMalformedException, QueryTypeUnsupportedException, ResourceRecordMalformedException {
         DNSHeader dnsHeader = DNSHeader.fromBuffer(buffer);
 
-        List<DNSQuestion> dnsQuestions = new ArrayList<>(dnsHeader.questionCount);
+        List<DNSQuestion> dnsQuestions = new ArrayList<>(dnsHeader.getQuestionCount());
 
-        for (short i = 0; i < dnsHeader.questionCount; i++) {
+        for (short i = 0; i < dnsHeader.getQuestionCount(); i++) {
             DNSQuestion question = new DNSQuestion();
             question.readBuffer(buffer);
             dnsQuestions.add(question);
         }
 
-        List<ResourceRecord> answerRecords = new ArrayList<>(dnsHeader.answerRecordCount);
+        List<ResourceRecord> answerRecords = new ArrayList<>(dnsHeader.getAnswerRecordCount());
 
-        for (short i = 0; i < dnsHeader.answerRecordCount; i++) {
+        for (short i = 0; i < dnsHeader.getAnswerRecordCount(); i++) {
             ResourceRecord answerRecord = DNSRecord.fromBuffer(buffer);
             answerRecords.add(answerRecord);
         }
 
-        List<ResourceRecord> authorityRecords = new ArrayList<>(dnsHeader.authoritativeRecordCount);
+        List<ResourceRecord> authorityRecords = new ArrayList<>(dnsHeader.getAuthoritativeRecordCount());
 
-        for (short i = 0; i < dnsHeader.authoritativeRecordCount; i++) {
+        for (short i = 0; i < dnsHeader.getAuthoritativeRecordCount(); i++) {
             ResourceRecord authorityRecord = DNSRecord.fromBuffer(buffer);
             authorityRecords.add(authorityRecord);
         }
 
-        List<ResourceRecord> additionalRecords = new ArrayList<>(dnsHeader.additionalRecordCount);
+        List<ResourceRecord> additionalRecords = new ArrayList<>(dnsHeader.getAdditionalRecordCount());
 
-        for (short i = 0; i < dnsHeader.additionalRecordCount; i++) {
+        for (short i = 0; i < dnsHeader.getAdditionalRecordCount(); i++) {
             ResourceRecord additionalRecord = DNSRecord.fromBuffer(buffer);
             additionalRecords.add(additionalRecord);
         }

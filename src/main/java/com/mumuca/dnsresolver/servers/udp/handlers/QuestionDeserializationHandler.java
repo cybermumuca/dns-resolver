@@ -22,10 +22,10 @@ public class QuestionDeserializationHandler extends AbstractHandler {
 
         } catch (DNSServerException e) {
             e.printStackTrace();
-            sendError(context, context.getDnsHeader().id, getResultCode(e));
+            sendError(context, context.getDnsHeader().getId(), getResultCode(e));
         } catch (Exception e) {
             e.printStackTrace();
-            sendError(context, context.getDnsHeader().id, ResultCode.SERVER_FAILURE);
+            sendError(context, context.getDnsHeader().getId(), ResultCode.SERVER_FAILURE);
         }
     }
 }

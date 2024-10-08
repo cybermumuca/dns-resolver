@@ -27,11 +27,11 @@ public class DNSQuery {
     public static DNSQuery from(int id, boolean withRecursion, String name, QueryType queryType, short qclass) {
         DNSHeader dnsHeader = new DNSHeader();
 
-        dnsHeader.id = id;
-        dnsHeader.query = true;
-        dnsHeader.opcode = 0;
-        dnsHeader.recursionDesired = withRecursion;
-        dnsHeader.questionCount = 1;
+        dnsHeader.setId(id);
+        dnsHeader.setQuery(true);
+        dnsHeader.setOpcode((short) 0);
+        dnsHeader.setRecursionDesired(withRecursion);
+        dnsHeader.setQuestionCount(1);
 
         return new DNSQuery(dnsHeader, new DNSQuestion(name, queryType, qclass));
     }

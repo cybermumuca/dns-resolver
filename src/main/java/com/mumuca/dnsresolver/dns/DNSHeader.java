@@ -43,19 +43,19 @@ public class DNSHeader {
      * @see ResultCode
      */
 
-    public int id;
-    public boolean query;
-    public short opcode;
-    public boolean authoritativeAnswer;
-    public boolean truncatedMessage;
-    public boolean recursionDesired;
-    public boolean recursionAvailable;
-    public short z;
-    public ResultCode resultCode;
-    public int questionCount;
-    public int answerRecordCount;
-    public int authoritativeRecordCount;
-    public int additionalRecordCount;
+    private int id;
+    private boolean query;
+    private short opcode;
+    private boolean authoritativeAnswer;
+    private boolean truncatedMessage;
+    private boolean recursionDesired;
+    private boolean recursionAvailable;
+    private short z;
+    private ResultCode resultCode;
+    private int questionCount;
+    private int answerRecordCount;
+    private int authoritativeRecordCount;
+    private int additionalRecordCount;
 
     public DNSHeader() {
         this.resultCode = ResultCode.NO_ERROR;
@@ -126,6 +126,110 @@ public class DNSHeader {
         } catch (EndOfBufferException e) {
             throw new InvalidHeaderSizeException();
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isQuery() {
+        return query;
+    }
+
+    public void setQuery(boolean query) {
+        this.query = query;
+    }
+
+    public short getOpcode() {
+        return opcode;
+    }
+
+    public void setOpcode(short opcode) {
+        this.opcode = opcode;
+    }
+
+    public boolean isAuthoritativeAnswer() {
+        return authoritativeAnswer;
+    }
+
+    public void setAuthoritativeAnswer(boolean authoritativeAnswer) {
+        this.authoritativeAnswer = authoritativeAnswer;
+    }
+
+    public boolean isTruncatedMessage() {
+        return truncatedMessage;
+    }
+
+    public void setTruncatedMessage(boolean truncatedMessage) {
+        this.truncatedMessage = truncatedMessage;
+    }
+
+    public boolean isRecursionDesired() {
+        return recursionDesired;
+    }
+
+    public void setRecursionDesired(boolean recursionDesired) {
+        this.recursionDesired = recursionDesired;
+    }
+
+    public boolean isRecursionAvailable() {
+        return recursionAvailable;
+    }
+
+    public void setRecursionAvailable(boolean recursionAvailable) {
+        this.recursionAvailable = recursionAvailable;
+    }
+
+    public short getZ() {
+        return z;
+    }
+
+    public void setZ(short z) {
+        this.z = z;
+    }
+
+    public ResultCode getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(ResultCode resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public int getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
+    }
+
+    public int getAnswerRecordCount() {
+        return answerRecordCount;
+    }
+
+    public void setAnswerRecordCount(int answerRecordCount) {
+        this.answerRecordCount = answerRecordCount;
+    }
+
+    public int getAuthoritativeRecordCount() {
+        return authoritativeRecordCount;
+    }
+
+    public void setAuthoritativeRecordCount(int authoritativeRecordCount) {
+        this.authoritativeRecordCount = authoritativeRecordCount;
+    }
+
+    public int getAdditionalRecordCount() {
+        return additionalRecordCount;
+    }
+
+    public void setAdditionalRecordCount(int additionalRecordCount) {
+        this.additionalRecordCount = additionalRecordCount;
     }
 
     @Override

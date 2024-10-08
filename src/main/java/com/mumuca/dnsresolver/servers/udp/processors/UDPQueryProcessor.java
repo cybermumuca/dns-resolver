@@ -1,10 +1,12 @@
 package com.mumuca.dnsresolver.servers.udp.processors;
 
+import com.mumuca.dnsresolver.servers.resolvers.Resolver;
 import com.mumuca.dnsresolver.servers.udp.contexts.DNSQueryContext;
 import com.mumuca.dnsresolver.servers.udp.handlers.AbstractHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.HeaderDeserializationHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.QueryHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.QuestionDeserializationHandler;
+import com.mumuca.dnsresolver.servers.udp.resolvers.CloudflareDoHResolver;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -29,7 +31,9 @@ public class UDPQueryProcessor implements Runnable {
 
         AbstractHandler headerDeserializationHandler = new HeaderDeserializationHandler();
         AbstractHandler questionDeserializationHandler = new QuestionDeserializationHandler();
-        AbstractHandler queryHandler = new QueryHandler();
+
+        Resolver cloudflareDoHResolver = new CloudflareDoHResolver();
+        AbstractHandler queryHandler = new QueryHandler(cloudflareDoHResolver);
 
         headerDeserializationHandler.setNext(questionDeserializationHandler);
         questionDeserializationHandler.setNext(queryHandler);
