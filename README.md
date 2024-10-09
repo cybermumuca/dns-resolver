@@ -89,7 +89,7 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
       - [ ] Nameserver aleatório
     - Resolvers
       - [x] Cloudflare DoH Resolver
-      - [ ] Cloudflare DNS Resolver
+      - [x] Cloudflare DNS Resolver
       - [ ] Google DNS Resolver
       - [ ] UDP DNS Resolver
       - [ ] TCP DNS Resolver
