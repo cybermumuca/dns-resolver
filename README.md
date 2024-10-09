@@ -109,7 +109,7 @@ Antes de começar, verifique se você possui as seguintes ferramentas instaladas
 Configure e execute o projeto:
 
 - [Manualmente](#manualmente)
-- [Usando Docker](#usando-docker)(Recomendado)
+- [Usando Docker](#usando-docker) (Recomendado)
 
 ### Manualmente
 
