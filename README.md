@@ -22,6 +22,7 @@
 - [💡 Funcionalidades](#-funcionalidades)
 - [📦 Pré-requisitos](#-pré-requisitos)
 - [🔧 Configurando o Projeto](#-configurando-o-projeto)
+  - [Manualmente](#manualmente)
   - [Usando Docker](#usando-docker)
 - [👤 Autor](#-autor)
 - [⚖️ Licença](#-licença)
@@ -105,11 +106,18 @@ Antes de começar, verifique se você possui as seguintes ferramentas instaladas
 
 ## 🔧 Configurando o Projeto
 
+Configure e execute o projeto:
+
+- [Manualmente](#manualmente)
+- [Usando Docker](#usando-docker)(Recomendado)
+
+### Manualmente
+
 Siga os passos abaixo para configurar e executar o projeto:
 
 ### Usando Docker
 
-Se preferir pode configurar o projeto usando o docker, desta forma:
+Siga os passos abaixo para configurar um container docker e começar a usar o projeto:
 
 ## 👤 Autor
 
