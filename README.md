@@ -90,7 +90,7 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
     - Resolvers
       - [x] Cloudflare DoH Resolver
       - [x] Cloudflare DNS Resolver
-      - [ ] Google DNS Resolver
+      - [x] Google DNS Resolver
       - [ ] UDP DNS Resolver
       - [ ] TCP DNS Resolver
     - BlackList
