@@ -1,7 +1,6 @@
 package com.mumuca.dnsresolver.servers.udp.resolvers;
 
 import com.mumuca.dnsresolver.dns.DNSQuery;
-import com.mumuca.dnsresolver.dns.DNSQuestion;
 import com.mumuca.dnsresolver.dns.DNSResponse;
 import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
 import com.mumuca.dnsresolver.servers.exceptions.ServerFailureException;
