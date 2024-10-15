@@ -24,18 +24,6 @@ public class DNSQuery {
         return dnsQuestion;
     }
 
-    public static DNSQuery from(int id, boolean withRecursion, String name, QueryType queryType, short qclass) {
-        DNSHeader dnsHeader = new DNSHeader();
-
-        dnsHeader.setId(id);
-        dnsHeader.setQuery(true);
-        dnsHeader.setOpcode((short) 0);
-        dnsHeader.setRecursionDesired(withRecursion);
-        dnsHeader.setQuestionCount(1);
-
-        return new DNSQuery(dnsHeader, new DNSQuestion(name, queryType, qclass));
-    }
-
     public void writeToBuffer(PacketBuffer buffer) throws InvalidHeaderSizeException {
         this.dnsHeader.writeToBuffer(buffer);
         this.dnsQuestion.writeToBuffer(buffer);

@@ -7,6 +7,7 @@ import com.mumuca.dnsresolver.servers.udp.handlers.HeaderDeserializationHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.QueryHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.QuestionDeserializationHandler;
 import com.mumuca.dnsresolver.servers.udp.resolvers.GoogleDNSResolver;
+import com.mumuca.dnsresolver.servers.udp.resolvers.UDPDNSResolver;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

@@ -77,6 +77,11 @@ public class DNSHeader {
         this.additionalRecordCount = 0;
     }
 
+    public DNSHeader(int id, short opcode, boolean recursionDesired, int questionCount) {
+        this(id, true, opcode, recursionDesired, false, ResultCode.NO_ERROR);
+        this.questionCount = questionCount;
+    }
+
     public static DNSHeader fromBuffer(PacketBuffer buffer) throws InvalidHeaderSizeException {
         var dnsHeader = new DNSHeader();
 

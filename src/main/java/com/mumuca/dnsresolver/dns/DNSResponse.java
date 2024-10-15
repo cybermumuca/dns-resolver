@@ -1,11 +1,16 @@
 package com.mumuca.dnsresolver.dns;
 
 import com.mumuca.dnsresolver.dns.exceptions.*;
+import com.mumuca.dnsresolver.dns.records.A;
+import com.mumuca.dnsresolver.dns.records.NS;
 import com.mumuca.dnsresolver.dns.records.ResourceRecord;
 import com.mumuca.dnsresolver.dns.utils.PacketBuffer;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class DNSResponse {
 
@@ -103,5 +108,31 @@ public class DNSResponse {
         for (ResourceRecord additionalRecord : additionalRecords) {
             additionalRecord.writeToBuffer(buffer);
         }
+    }
+
+    private Stream<String[]> getNS(String qname) {
+        return this.authorityRecords.stream()
+                .filter(record -> record instanceof NS)
+                .map(record -> {
+                    NS nsRecord = (NS) record;
+                    return new String[]{nsRecord.name(), nsRecord.ns()};
+                })
+                .filter(tuple -> qname.endsWith(tuple[0]));
+    }
+
+    public Optional<String> getResolvedNS(String qname) {
+        return getNS(qname)
+                .flatMap(pair -> additionalRecords.stream()
+                        .filter(record -> record instanceof A)
+                        .filter(record -> record.name().equals(pair[1]))
+                        .map(record -> ((A) record).address())
+                )
+                .findFirst();
+    }
+
+    public Optional<String> getUnresolvedNS(String qname) {
+        return getNS(qname)
+                .map(ns -> ns[1])
+                .findFirst();
     }
 }
