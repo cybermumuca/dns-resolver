@@ -48,9 +48,9 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
 
 **⚠️OBS⚠️**: Este projeto se encontra em estado de desenvolvimento ativo, algumas das funcionalidades planejadas não estão funcionando correramente ou ainda não foram implementadas.
 
-✅️: Funcionando corretamente.
-⚠️: Funcionando com alguns problemas.
-❌️: Não implementado.
+✅️: Funcionando corretamente.  
+⚠️: Funcionando com alguns problemas.  
+❌️: Não implementado.  
 
 - ❌️ EDNS
 - ✅️ Consultas UDP
