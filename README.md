@@ -46,55 +46,62 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
 
 ## 💡 Funcionalidades
 
-- [ ] EDNS
-- [x] Consultas UDP
-- [x] Resolução de Consultas UDP usando DoH (Cloudflare)
-- [ ] Resolução de Consultas UDP usando TCP
-- [ ] Consultas TCP
-- [ ] Consulta Recursiva
+**⚠️OBS⚠️**: Este projeto se encontra em estado de desenvolvimento ativo, algumas das funcionalidades planejadas não estão funcionando correramente ou ainda não foram implementadas.
+
+✅️: Funcionando corretamente.
+⚠️: Funcionando com alguns problemas.
+❌️: Não implementado.
+
+- ❌️ EDNS
+- ✅️ Consultas UDP
+- ✅️ Resolução de Consultas UDP usando DoH (Cloudflare)
+- ❌️ Resolução de Consultas UDP usando TCP
+- ❌️ Consultas TCP
+- ⚠️ Consulta Recursiva
 
 - Tipos de Consultas
-  - [x] A
-  - [x] NS
-  - [x] CNAME
-  - [x] MX
-  - [x] AAAA
-  - [x] SOA
-  - [x] PTR
+  - ✅️ A
+  - ✅️ NS
+  - ✅️ CNAME
+  - ✅️ MX
+  - ✅️ AAAA
+  - ✅️ SOA
+  - ✅️ PTR
+  - ❌️ HTTPS
 
 - Blacklist para sites de:
-  - [ ] Jogos de Azar
-  - [ ] Pornôgrafia
-  - [ ] Redes sociais
-  - [ ] Rastreadores
-  - [ ] Anúncios
-  - [ ] Fake news
-  - [ ] Malwares
+  - ❌️ Jogos de Azar
+  - ❌️ Pornôgrafia
+  - ❌️ Redes sociais
+  - ❌️ Rastreadores
+  - ❌️ Anúncios
+  - ❌️ Fake news
+  - ❌️ Malwares
 
-- [ ] Renovação de Cache em segundo plano
+- ❌️ Renovação de Cache em segundo plano
 
 - Configurações
     - Caches
-      - [ ] Cache por arquivo
-      - [ ] Cache usando Redis
-      - [ ] Cache em memória
-      - [ ] Sem cache
+      - ❌️ Cache por arquivo
+      - ❌️ Cache usando Redis
+      - ❌️ Cache em memória
+      - ⚠️ Sem cache
     - Servidores
-      - [x] UDP (IPv4)
-      - [x] UDP (IPv6)
-      - [ ] TCP (IPv4)
-      - [ ] TCP (IPv6)
+      - ✅️ UDP (IPv4)
+      - ✅️ UDP (IPv6)
+      - ❌️ TCP (IPv4)
+      - ❌️ TCP (IPv6)
     - NameServers
-      - [ ] Lista de Nameservers personalizada
-      - [ ] Nameserver aleatório
+      - ❌️ Lista de Nameservers personalizada
+      - ❌️ Nameserver aleatório
     - Resolvers
-      - [x] Cloudflare DoH Resolver
-      - [x] Cloudflare DNS Resolver
-      - [x] Google DNS Resolver
-      - [ ] UDP DNS Resolver
-      - [ ] TCP DNS Resolver
+      - ✅️ Cloudflare DoH Resolver
+      - ✅️ Cloudflare DNS Resolver
+      - ✅️ Google DNS Resolver
+      - ⚠️ UDP DNS Resolver
+      - ❌️ TCP DNS Resolver
     - BlackList
-      - [ ] Lista de Nomes proibidos
+      - ❌️ Lista de Nomes proibidos
 
 ## 📦 Pré-requisitos
 
