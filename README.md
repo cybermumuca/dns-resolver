@@ -46,7 +46,7 @@ Essas RFCs formam a base teórica necessária para o desenvolvimento prático de
 
 ## 💡 Funcionalidades
 
-**⚠️OBS⚠️**: Este projeto se encontra em estado de desenvolvimento ativo, algumas das funcionalidades planejadas não estão funcionando correramente ou ainda não foram implementadas.
+**⚠️OBS⚠️**: este projeto se encontra em estado de desenvolvimento ativo, algumas das funcionalidades planejadas não estão funcionando corretamente ou ainda não foram implementadas.
 
 ✅️: Funcionando corretamente.  
 ⚠️: Funcionando com alguns problemas.  
