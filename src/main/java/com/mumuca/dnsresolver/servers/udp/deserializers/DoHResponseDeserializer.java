@@ -9,6 +9,7 @@ import com.mumuca.dnsresolver.dns.DNSHeader;
 import com.mumuca.dnsresolver.dns.DNSQuery;
 import com.mumuca.dnsresolver.dns.DNSResponse;
 import com.mumuca.dnsresolver.dns.enums.QueryType;
+import com.mumuca.dnsresolver.dns.enums.ResultCode;
 import com.mumuca.dnsresolver.dns.records.*;
 import com.mumuca.dnsresolver.servers.exceptions.NotImplementedException;
 
@@ -32,20 +33,18 @@ public class DoHResponseDeserializer extends JsonDeserializer<DNSResponse> {
 
     @Override
     public DNSResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
-        DNSHeader header = dnsQuery.getHeader();
-        header.setQuery(false);
-        header.setZ((short) 0);
-
         JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
+
+        DNSHeader header = dnsQuery.getHeader();
+
+        header.setResultCode(ResultCode.fromCode(rootNode.get("Status").asInt()));
+        header.setTruncatedMessage(rootNode.get("TC").asBoolean());
 
         List<ResourceRecord> answerRecords = new ArrayList<>();
         List<ResourceRecord> authorityRecords = new ArrayList<>();
 
         processRecords(rootNode.get("Answer"), answerRecords);
         processRecords(rootNode.get("Authority"), authorityRecords);
-
-        header.setAnswerRecordCount(answerRecords.size());
-        header.setAuthoritativeRecordCount(authorityRecords.size());
 
         return new DNSResponse(dnsQuery, answerRecords, authorityRecords);
     }

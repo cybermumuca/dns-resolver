@@ -3,6 +3,7 @@ package com.mumuca.dnsresolver.servers.udp.resolvers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.mumuca.dnsresolver.dns.DNSHeader;
 import com.mumuca.dnsresolver.dns.DNSQuery;
 import com.mumuca.dnsresolver.dns.DNSQuestion;
 import com.mumuca.dnsresolver.dns.DNSResponse;
@@ -50,17 +51,10 @@ public class CloudflareDoHResolver extends Resolver {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                SimpleModule module = new SimpleModule();
-
-                module.addDeserializer(DNSResponse.class, new DoHResponseDeserializer(dnsQuery));
-
-                objectMapper.registerModule(module);
-
-                return objectMapper.readValue(response.body(), DNSResponse.class);
+                return serializeResponse(response.body(), dnsQuery);
             } else {
                 throw new ServerFailureException("Failed to resolve DoH: HTTP error code " + response.statusCode());
             }
-
         } catch (JsonProcessingException e) {
             throw new ServerFailureException("Error deserializing response from upstream server");
         } catch (IOException e) {
@@ -68,5 +62,25 @@ public class CloudflareDoHResolver extends Resolver {
         } catch (InterruptedException e) {
             throw new ServerFailureException("Thread interrupted");
         }
+    }
+
+    private DNSResponse serializeResponse(String response, DNSQuery dnsQuery) throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+
+        module.addDeserializer(DNSResponse.class, new DoHResponseDeserializer(dnsQuery));
+
+        objectMapper.registerModule(module);
+
+        DNSResponse doHResponse = objectMapper.readValue(response, DNSResponse.class);
+
+        DNSHeader doHHeader = doHResponse.getHeader();
+
+        doHHeader.setQuery(false);
+        doHHeader.setZ((short) 0);
+        doHHeader.setRecursionAvailable(true);
+        doHHeader.setAnswerRecordCount(doHResponse.getAnswerRecords().size());
+        doHHeader.setAuthoritativeRecordCount(doHResponse.getAuthorityRecords().size());
+
+        return doHResponse;
     }
 }
