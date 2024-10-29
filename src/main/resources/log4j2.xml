@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns="https://logging.apache.org/xml/ns"
+               xsi:schemaLocation="
+                       https://logging.apache.org/xml/ns
+                       https://logging.apache.org/xml/ns/log4j-config-2.xsd">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss} %highlight{%p}{FATAL=bright red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=magenta} [%style{%t}{yellow}] %style{%logger}{cyan}: %highlight{%msg}{FATAL=bright red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=magenta}%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -135,4 +135,14 @@ public class DNSResponse {
                 .map(ns -> ns[1])
                 .findFirst();
     }
+
+    @Override
+    public String toString() {
+        return "DNSResponse{" + "dnsHeader=" + dnsHeader +
+                ", dnsQuestion=" + dnsQuestion +
+                ", answerRecords=" + answerRecords +
+                ", authorityRecords=" + authorityRecords +
+                ", additionalRecords=" + additionalRecords +
+                '}';
+    }
 }

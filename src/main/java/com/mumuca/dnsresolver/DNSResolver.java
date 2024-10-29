@@ -8,6 +8,7 @@ public class DNSResolver {
 
         Thread udpServerThread = new Thread(udpServer);
 
+        udpServerThread.setName("UDP Server");
         udpServerThread.start();
     }
 }

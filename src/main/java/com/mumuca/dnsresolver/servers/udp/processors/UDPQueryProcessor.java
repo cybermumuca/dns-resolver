@@ -1,6 +1,7 @@
 package com.mumuca.dnsresolver.servers.udp.processors;
 
 import com.mumuca.dnsresolver.servers.resolvers.Resolver;
+import com.mumuca.dnsresolver.servers.udp.UDPServer;
 import com.mumuca.dnsresolver.servers.udp.contexts.DNSQueryContext;
 import com.mumuca.dnsresolver.servers.udp.handlers.AbstractHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.HeaderDeserializationHandler;
@@ -8,12 +9,16 @@ import com.mumuca.dnsresolver.servers.udp.handlers.QueryHandler;
 import com.mumuca.dnsresolver.servers.udp.handlers.QuestionDeserializationHandler;
 import com.mumuca.dnsresolver.servers.udp.resolvers.GoogleDNSResolver;
 import com.mumuca.dnsresolver.servers.udp.resolvers.UDPDNSResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class UDPQueryProcessor implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(UDPQueryProcessor.class);
+
     private final DatagramSocket serverSocket;
     private final DatagramPacket queryPacket;
 
@@ -24,6 +29,9 @@ public class UDPQueryProcessor implements Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread()
+                .setName("UDPQueryProcessor-" + queryPacket.getAddress().getHostAddress() + ":" + queryPacket.getPort());
+        logger.debug("Processing packet from {}:{}", queryPacket.getAddress(), queryPacket.getPort());
         process();
     }
 
@@ -42,8 +50,7 @@ public class UDPQueryProcessor implements Runnable {
         try {
             headerDeserializationHandler.handle(context);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logger.error("Error processing query from {}: {}", queryPacket.getAddress(), e.getMessage(), e);
         }
     }
 }
