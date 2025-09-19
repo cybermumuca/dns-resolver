@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">DNS Resolver rápido e privado.</p>
-<p align="center">⚠️ <strong>Em desenvolvimento</strong> ⚠️</p>
+<!-- <p align="center">⚠️ <strong>Em desenvolvimento</strong> ⚠️</p> -->
 
 ## 📜 Sumário
 
